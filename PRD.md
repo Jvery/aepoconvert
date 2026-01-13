@@ -34,12 +34,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need shadcn/ui components available for consistent UI.
 
 **Acceptance Criteria:**
-- [ ] Run `npx shadcn@latest init` with New York style, Zinc base color
-- [ ] Verify `components.json` created with correct paths
-- [ ] Install Button component: `npx shadcn@latest add button`
-- [ ] Button component renders correctly in page.tsx
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Run `npx shadcn@latest init` with New York style, Zinc base color
+- [x] Verify `components.json` created with correct paths
+- [x] Install Button component: `npx shadcn@latest add button`
+- [x] Button component renders correctly in page.tsx
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
