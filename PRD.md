@@ -137,13 +137,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need global state management for files and conversion.
 
 **Acceptance Criteria:**
-- [ ] Install `zustand` package
-- [ ] Create `src/store/conversion-store.ts`
-- [ ] State: { files: ConvertibleFile[], isConverting: boolean, globalSettings: QualitySettings }
-- [ ] Actions: addFiles(files: File[]), removeFile(id: string), updateFile(id: string, updates: Partial<ConvertibleFile>), setOutputFormat(id: string, format: string), setGlobalSettings(settings: Partial<QualitySettings>), startConversion(), clearAll()
-- [ ] Use immer middleware for immutable updates
-- [ ] Install `immer` package
-- [ ] Typecheck passes
+- [x] Install `zustand` package
+- [x] Create `src/store/conversion-store.ts`
+- [x] State: { files: ConvertibleFile[], isConverting: boolean, globalSettings: QualitySettings }
+- [x] Actions: addFiles(files: File[]), removeFile(id: string), updateFile(id: string, updates: Partial<ConvertibleFile>), setOutputFormat(id: string, format: string), setGlobalSettings(settings: Partial<QualitySettings>), startConversion(), clearAll()
+- [x] Use immer middleware for immutable updates
+- [x] Install `immer` package
+- [x] Typecheck passes
 
 ---
 

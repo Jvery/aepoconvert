@@ -154,3 +154,21 @@
 - AsciiDoc uses multiple extensions: adoc, asciidoc, asc
 
 ---
+
+### Iteration 9 - US-009: Create unified format utilities
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/formats/index.ts` with unified format utilities
+- Exported `ALL_FORMATS` combining IMAGE_FORMATS, AUDIO_FORMATS, and DOCUMENT_FORMATS (62+ formats total)
+- Implemented `detectFormat(file: File)` - detects format by extension first, then falls back to MIME type
+- Implemented `getConvertibleFormats(from: FormatInfo)` - returns array of FormatInfo objects for valid output formats
+- Implemented `getFormatByExtension(ext: string)` - finds format by extension (handles dot prefix and case)
+- Implemented `getFormatsByCategory(category: string)` - filters formats by category ('image', 'audio', 'document')
+- Re-exported individual format arrays for convenience
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Used type guard `filter((format): format is FormatInfo => format !== null)` to properly type-narrow filtered results
+- Accepted both `FormatCategory` and `string` for category parameter for flexibility
+
+---
