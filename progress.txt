@@ -14,6 +14,8 @@
 - Next.js 16: "middleware" file convention is deprecated, prefer "proxy" (but still works for now)
 - @imagemagick/magick-wasm: Static `read()` is on `ImageMagick` class, not `MagickImage` class
 - @imagemagick/magick-wasm: MagickFormat has constants for modern formats (Avif, Jxl, Heic, Heif) and RAW formats (Nef, Cr2, Cr3, Arw, etc.)
+- @ffmpeg/ffmpeg: Use FFmpeg class with load() method; use toBlobURL from @ffmpeg/util for CORS-safe CDN loading
+- @ffmpeg/ffmpeg: Multi-threading requires SharedArrayBuffer (check window.crossOriginIsolated)
 
 ## Iterations
 
@@ -256,5 +258,26 @@
 - MagickFormat has constants for RAW formats: Nef, Cr2, Cr3, Arw, Dng, Orf, Raf, Rw2, Pef, Srw
 - Separated FORMAT_MAP (output formats) and INPUT_ONLY_FORMATS (read-only formats) for clearer architecture
 - AVIF and JXL are lossy formats that benefit from quality settings
+
+---
+
+### Iteration 14 - US-014: Setup FFmpeg WASM for audio
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `@ffmpeg/ffmpeg` (v0.12.15) and `@ffmpeg/util` packages
+- Created `src/lib/converters/ffmpeg-loader.ts`
+- Implemented `initializeFFmpeg(): Promise<FFmpeg>` async function
+- Loads FFmpeg core from jsDelivr CDN using toBlobURL for CORS-safe loading
+- Exported `isFFmpegReady` boolean flag, updated after successful initialization
+- Added `checkSharedArrayBufferSupport()` and `checkCrossOriginIsolation()` functions
+- Warns user if SharedArrayBuffer is unavailable (requires COOP/COEP headers)
+- Added helper functions: `getFFmpegInstance()`, `checkFFmpegReady()`, `terminateFFmpeg()`, `resetFFmpegState()`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- @ffmpeg/ffmpeg v0.12.15 uses FFmpeg class with load() method accepting coreURL, wasmURL, workerURL
+- Use @ffmpeg/util's toBlobURL() to convert CDN URLs to blob URLs (avoids CORS and MIME type issues)
+- FFmpeg requires SharedArrayBuffer for multi-threading; check window.crossOriginIsolated for header presence
+- Worker is optional and only used when SharedArrayBuffer is available
 
 ---

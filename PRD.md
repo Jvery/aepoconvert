@@ -205,14 +205,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a converter function for audio operations.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/converters/audio-converter.ts`
-- [ ] Export async function `convertAudio(file: File, toFormat: string, settings: QualitySettings): Promise<Blob>`
-- [ ] Write input file to FFmpeg virtual FS
-- [ ] Build FFmpeg command with codec based on output format
-- [ ] Support formats: MP3, WAV, OGG, FLAC, AAC, M4A
-- [ ] Apply bitrate setting (-b:a) when provided
-- [ ] Read output and return as Blob
-- [ ] Typecheck passes
+- [x] Create `src/lib/converters/audio-converter.ts`
+- [x] Export async function `convertAudio(file: File, toFormat: string, settings: QualitySettings): Promise<Blob>`
+- [x] Write input file to FFmpeg virtual FS
+- [x] Build FFmpeg command with codec based on output format
+- [x] Support formats: MP3, WAV, OGG, FLAC, AAC, M4A
+- [x] Apply bitrate setting (-b:a) when provided
+- [x] Read output and return as Blob
+- [x] Typecheck passes
 
 ---
 
