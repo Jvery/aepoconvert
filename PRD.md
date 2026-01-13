@@ -178,12 +178,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need support for additional image formats.
 
 **Acceptance Criteria:**
-- [ ] Add ICO output support
-- [ ] Add AVIF output support
-- [ ] Add JXL (JPEG XL) output support
-- [ ] Add HEIC/HEIF input support (read-only, convert to other formats)
-- [ ] Add RAW camera format input support (NEF, CR2, ARW — read-only)
-- [ ] Typecheck passes
+- [x] Add ICO output support
+- [x] Add AVIF output support
+- [x] Add JXL (JPEG XL) output support
+- [x] Add HEIC/HEIF input support (read-only, convert to other formats)
+- [x] Add RAW camera format input support (NEF, CR2, ARW — read-only)
+- [x] Typecheck passes
 
 ---
 

@@ -7,7 +7,7 @@ import { ImageMagick, MagickFormat } from '@imagemagick/magick-wasm';
 import { initializeMagick, checkMagickReady } from './magick-loader';
 
 /**
- * Maps lowercase format extensions to ImageMagick format constants
+ * Maps lowercase format extensions to ImageMagick format constants for OUTPUT
  */
 const FORMAT_MAP: Record<string, MagickFormat> = {
   png: MagickFormat.Png,
@@ -18,6 +18,31 @@ const FORMAT_MAP: Record<string, MagickFormat> = {
   bmp: MagickFormat.Bmp,
   tiff: MagickFormat.Tiff,
   tif: MagickFormat.Tiff,
+  // Extended formats (US-013)
+  ico: MagickFormat.Ico,
+  avif: MagickFormat.Avif,
+  jxl: MagickFormat.Jxl,
+};
+
+/**
+ * Maps format extensions to ImageMagick format constants for INPUT (read-only formats)
+ * These formats can be read but not written to
+ */
+const INPUT_ONLY_FORMATS: Record<string, MagickFormat> = {
+  // HEIC/HEIF formats (read-only)
+  heic: MagickFormat.Heic,
+  heif: MagickFormat.Heif,
+  // RAW camera formats (read-only)
+  nef: MagickFormat.Nef,  // Nikon
+  cr2: MagickFormat.Cr2,  // Canon
+  cr3: MagickFormat.Cr3,  // Canon (newer)
+  arw: MagickFormat.Arw,  // Sony
+  dng: MagickFormat.Dng,  // Adobe Digital Negative
+  orf: MagickFormat.Orf,  // Olympus
+  raf: MagickFormat.Raf,  // Fujifilm
+  rw2: MagickFormat.Rw2,  // Panasonic
+  pef: MagickFormat.Pef,  // Pentax
+  srw: MagickFormat.Srw,  // Samsung
 };
 
 /**
@@ -32,12 +57,16 @@ const MIME_TYPE_MAP: Record<string, string> = {
   bmp: 'image/bmp',
   tiff: 'image/tiff',
   tif: 'image/tiff',
+  // Extended formats (US-013)
+  ico: 'image/x-icon',
+  avif: 'image/avif',
+  jxl: 'image/jxl',
 };
 
 /**
  * Lossy formats that support quality settings
  */
-const LOSSY_FORMATS = new Set(['jpeg', 'jpg', 'webp']);
+const LOSSY_FORMATS = new Set(['jpeg', 'jpg', 'webp', 'avif', 'jxl']);
 
 /**
  * Convert an image file to a different format using ImageMagick WASM
@@ -120,4 +149,56 @@ export function isSupportedOutputFormat(format: string): boolean {
  */
 export function getSupportedOutputFormats(): string[] {
   return Object.keys(FORMAT_MAP);
+}
+
+/**
+ * Check if a format is supported for input (read-only formats like HEIC, RAW)
+ *
+ * @param format - Format extension to check
+ * @returns true if the format is supported for input
+ */
+export function isSupportedInputFormat(format: string): boolean {
+  const normalizedFormat = format.toLowerCase();
+  return normalizedFormat in FORMAT_MAP || normalizedFormat in INPUT_ONLY_FORMATS;
+}
+
+/**
+ * Get list of supported input-only formats (HEIC/HEIF and RAW camera formats)
+ * These formats can be read and converted to other formats but cannot be used as output
+ *
+ * @returns Array of input-only format extensions
+ */
+export function getInputOnlyFormats(): string[] {
+  return Object.keys(INPUT_ONLY_FORMATS);
+}
+
+/**
+ * Get all supported input formats (both regular and input-only)
+ *
+ * @returns Array of all supported input format extensions
+ */
+export function getAllSupportedInputFormats(): string[] {
+  return [...Object.keys(FORMAT_MAP), ...Object.keys(INPUT_ONLY_FORMATS)];
+}
+
+/**
+ * Check if a format is HEIC/HEIF
+ *
+ * @param format - Format extension to check
+ * @returns true if the format is HEIC or HEIF
+ */
+export function isHeicFormat(format: string): boolean {
+  const normalizedFormat = format.toLowerCase();
+  return normalizedFormat === 'heic' || normalizedFormat === 'heif';
+}
+
+/**
+ * Check if a format is a RAW camera format
+ *
+ * @param format - Format extension to check
+ * @returns true if the format is a RAW camera format
+ */
+export function isRawFormat(format: string): boolean {
+  const rawFormats = ['nef', 'cr2', 'cr3', 'arw', 'dng', 'orf', 'raf', 'rw2', 'pef', 'srw'];
+  return rawFormats.includes(format.toLowerCase());
 }
