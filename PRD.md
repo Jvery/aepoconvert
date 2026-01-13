@@ -233,11 +233,11 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need Pandoc WASM ready for document conversion.
 
 **Acceptance Criteria:**
-- [ ] Download pandoc.wasm to `public/pandoc.wasm` (from emscripten-forge or build)
-- [ ] Create `src/lib/converters/pandoc-loader.ts`
-- [ ] Async function `initializePandoc(): Promise<void>`
-- [ ] Export `let isPandocReady: boolean = false` flag
-- [ ] Typecheck passes
+- [x] Download pandoc.wasm to `public/pandoc.wasm` (from emscripten-forge or build)
+- [x] Create `src/lib/converters/pandoc-loader.ts`
+- [x] Async function `initializePandoc(): Promise<void>`
+- [x] Export `let isPandocReady: boolean = false` flag
+- [x] Typecheck passes
 
 ---
 

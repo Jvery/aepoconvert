@@ -17,6 +17,8 @@
 - @ffmpeg/ffmpeg: Use FFmpeg class with load() method; use toBlobURL from @ffmpeg/util for CORS-safe CDN loading
 - @ffmpeg/ffmpeg: Multi-threading requires SharedArrayBuffer (check window.crossOriginIsolated)
 - @ffmpeg/ffmpeg: readFile() returns Uint8Array with SharedArrayBuffer; use `new Uint8Array(data).buffer` for clean ArrayBuffer for Blob
+- @ffmpeg/ffmpeg: ALAC encoding requires `-f ipod` container format flag in addition to `-c:a alac` codec
+- pandoc-wasm: npm package bundles WASM binary; use Pandoc class with init() and run() methods; no manual download needed
 
 ## Iterations
 
@@ -300,5 +302,43 @@
 - FFmpeg.readFile() returns Uint8Array which may have SharedArrayBuffer backing; use `new Uint8Array(data).buffer` to get clean ArrayBuffer for Blob creation
 - FFmpeg virtual FS needs explicit writeFile() before exec() and readFile() after
 - Always clean up virtual FS files in finally block to prevent memory leaks
+
+---
+
+### Iteration 16 - US-016: Extend AudioConverter for all formats
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added OPUS output support using libopus codec (extension: opus, mimeType: audio/opus)
+- Added WMA output support using wmav2 codec (extension: wma, mimeType: audio/x-ms-wma)
+- Added AIFF output support using pcm_s16be codec (extensions: aiff/aif, mimeType: audio/aiff)
+- Added ALAC output support using alac codec in m4a container (extension: m4a with ipod container, mimeType: audio/mp4)
+- Updated BITRATE_SUPPORTED_FORMATS to include opus and wma
+- Added container format support in buildFFmpegArgs for ALAC (uses -f ipod flag)
+- Sample rate (-ar) was already implemented in US-015
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- ALAC (Apple Lossless Audio Codec) requires m4a container specified via `-f ipod` in FFmpeg
+- WMA and OPUS both support bitrate settings like MP3/AAC/OGG
+- AIFF uses pcm_s16be (16-bit signed big-endian PCM) codec, similar to WAV but with different byte order
+
+---
+
+### Iteration 17 - US-017: Setup Pandoc WASM for documents
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `pandoc-wasm` npm package (v0.0.2) which bundles Pandoc compiled for WebAssembly
+- Created `src/lib/converters/pandoc-loader.ts` following the same pattern as magick-loader.ts and ffmpeg-loader.ts
+- Implemented `initializePandoc(): Promise<void>` async function that initializes the Pandoc WASM binary
+- Exported `isPandocReady` boolean flag, updated after successful initialization
+- Added helper functions: `getPandocInstance()`, `checkPandocReady()`, `resetPandocState()`
+- Added version logging during initialization for debugging
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- pandoc-wasm npm package bundles the WASM binary internally and loads it via init() method
+- No manual wasm download needed - the package handles fetching from its bundled gzipped wasm files
+- Pandoc class provides: init(), run(params), getVersion() methods
+- run() accepts { text, options: { from, to }, files?, citeproc? } parameters
 
 ---
