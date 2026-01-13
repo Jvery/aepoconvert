@@ -368,14 +368,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to see each uploaded file with its details.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/files/FileCard.tsx`
-- [ ] Props: file: ConvertibleFile, onRemove: () => void, onFormatChange: (format: string) => void
-- [ ] Display: file type icon, file name (truncated if long), file size (formatted: KB/MB)
-- [ ] Display detected format as Badge
-- [ ] Remove button (X icon) in top-right corner
-- [ ] Card uses shadcn Card component with subtle shadow
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/files/FileCard.tsx`
+- [x] Props: file: ConvertibleFile, onRemove: () => void, onFormatChange: (format: string) => void
+- [x] Display: file type icon, file name (truncated if long), file size (formatted: KB/MB)
+- [x] Display detected format as Badge
+- [x] Remove button (X icon) in top-right corner
+- [x] Card uses shadcn Card component with subtle shadow
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
