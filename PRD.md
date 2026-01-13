@@ -47,9 +47,9 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need common UI components installed.
 
 **Acceptance Criteria:**
-- [ ] Install components: `npx shadcn@latest add card select slider progress toast tabs dialog tooltip badge dropdown-menu`
-- [ ] All components importable from `@/components/ui/*` without errors
-- [ ] Typecheck passes
+- [x] Install components: `npx shadcn@latest add card select slider progress toast tabs dialog tooltip badge dropdown-menu`
+- [x] All components importable from `@/components/ui/*` without errors
+- [x] Typecheck passes
 
 ---
 
