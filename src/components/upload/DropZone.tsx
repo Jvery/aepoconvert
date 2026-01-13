@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 export interface DropZoneProps {
@@ -15,9 +15,12 @@ export interface DropZoneProps {
 /**
  * DropZone component for drag-and-drop file upload
  * Large rectangular drop area with dashed border
+ * Visual feedback on drag-over with color and scale animation
  */
 export function DropZone({ onFilesSelected, disabled = false, className = '' }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
 
   const handleFiles = useCallback(
     (files: FileList | null) => {
@@ -32,6 +35,8 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
+      dragCounter.current = 0;
+      setIsDragging(false);
       if (disabled) return;
       handleFiles(e.dataTransfer.files);
     },
@@ -41,6 +46,28 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+  }, []);
+
+  const handleDragEnter = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (disabled) return;
+      dragCounter.current += 1;
+      if (dragCounter.current === 1) {
+        setIsDragging(true);
+      }
+    },
+    [disabled]
+  );
+
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current -= 1;
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
   }, []);
 
   const handleClick = useCallback(() => {
@@ -76,19 +103,23 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
       onClick={handleClick}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
       onKeyDown={handleKeyDown}
       aria-label="Drop files here or click to browse"
       aria-disabled={disabled}
       className={`
         relative min-h-[200px] w-full
         flex flex-col items-center justify-center gap-4
-        rounded-xl border-2 border-dashed border-border
-        bg-muted/30
+        rounded-xl border-2 border-dashed
         cursor-pointer
-        transition-colors duration-200
-        hover:border-primary/50 hover:bg-muted/50
+        transition-all duration-200 ease-out
         focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
         ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
+        ${isDragging
+          ? 'border-primary bg-primary/10 scale-[1.02]'
+          : 'border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50'
+        }
         ${className}
       `}
     >

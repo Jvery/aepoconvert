@@ -341,12 +341,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want visual feedback when dragging files over the drop zone.
 
 **Acceptance Criteria:**
-- [ ] Border color changes to accent color on drag-over
-- [ ] Background color lightens/changes on drag-over
-- [ ] Scale transform subtle animation on drag-over
-- [ ] Use React state to track isDragging
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Border color changes to accent color on drag-over
+- [x] Background color lightens/changes on drag-over
+- [x] Scale transform subtle animation on drag-over
+- [x] Use React state to track isDragging
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

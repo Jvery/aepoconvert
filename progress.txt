@@ -426,3 +426,74 @@
 - Fallback to main thread conversion provides graceful degradation for environments without Worker support
 
 ---
+
+### Iteration 22 - US-022: Create color theme and CSS variables
+**Status:** ✅ SUCCESS
+**What was done:**
+- Updated `src/app/globals.css` with gradient CSS variables
+- Added light mode variables: --gradient-start (purple), --gradient-end (magenta), --gradient-accent (cyan)
+- Added dark mode variables with more vibrant colors for better contrast on dark backgrounds
+- Created gradient utility classes:
+  - `.gradient-bg` - static gradient background
+  - `.gradient-bg-animated` - animated shifting gradient background
+  - `.gradient-text` - gradient text effect using background-clip
+  - `.gradient-text-animated` - animated gradient text effect
+  - `.gradient-border` - gradient border using pseudo-element technique
+  - `.gradient-border-animated` - animated gradient border
+- Added `@keyframes gradient-shift` animation (8s ease infinite)
+- Added `@keyframes gradient-rotate` for future use
+- Included `prefers-reduced-motion: reduce` support for accessibility
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Use oklch color space for consistent, perceptually uniform gradient colors
+- Gradient border technique uses pseudo-element with mask to create border effect
+- Animation should use background-size: 300% with shifting position for smooth loops
+- Always include prefers-reduced-motion media query for accessibility
+
+---
+
+### Iteration 23 - US-023: Create app layout with Header
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/layout/Header.tsx` with client-side theme management
+- Displayed "aepoconvert" logo with gradient-text class (purple/pink gradient)
+- Added theme toggle button with Sun/Moon icons from lucide-react
+- lucide-react was already installed (no additional install needed)
+- Header is sticky (top-0, z-50) with backdrop-blur-md effect
+- Updated `src/app/layout.tsx` to import and include Header component
+- Added `<main>` wrapper with min-height calculation for content area
+- Verified typecheck passes with `npm run build`
+- Verified visually in browser: light mode, dark mode toggle, and sticky behavior all working
+
+**Learnings:**
+- Theme toggle pattern: use useState for isDark, update document.documentElement.classList and localStorage
+- Use mounted state to prevent hydration mismatch when checking initial theme
+- Check both localStorage and system preference (prefers-color-scheme) for initial theme
+- backdrop-blur works well with bg-background/80 for semi-transparent sticky header
+
+---
+
+### Iteration 24 - US-024: Create DropZone component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/upload/DropZone.tsx` with drag-and-drop functionality
+- Large rectangular drop area with min-height: 200px
+- Dashed border (border-dashed) with rounded corners (rounded-xl)
+- Upload icon from lucide-react in circular background
+- "Drop files here or click to browse" text with subtitle
+- Hidden file input with multiple attribute for multi-file selection
+- onDrop, onClick, onDragOver handlers with proper event handling
+- Added accessibility: role="button", tabIndex, aria-label, keyboard navigation (Enter/Space)
+- Fixed i18n routing: created [locale] folder structure with layout.tsx and page.tsx
+- Updated root layout to delegate to locale layout
+- Verified typecheck passes with `npm run build`
+- Verified visually in browser: drop zone renders correctly with all elements
+
+**Learnings:**
+- next-intl middleware redirects `/` to `/en` but requires `[locale]` folder structure
+- Root layout should return `children` directly when using locale-based layouts
+- For accessibility, DropZone should have role="button", tabIndex, aria-label, and keyboard handlers
+- Reset file input value after selection to allow re-selecting same file
+
+---
