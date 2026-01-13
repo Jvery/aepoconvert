@@ -123,13 +123,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need utility functions for format detection and lookup.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/formats/index.ts`
-- [ ] Export `ALL_FORMATS` = [...IMAGE_FORMATS, ...AUDIO_FORMATS, ...DOCUMENT_FORMATS]
-- [ ] Function `detectFormat(file: File): FormatInfo | null` — detect by extension, fallback to mimeType
-- [ ] Function `getConvertibleFormats(from: FormatInfo): FormatInfo[]` — return valid output formats
-- [ ] Function `getFormatByExtension(ext: string): FormatInfo | null`
-- [ ] Function `getFormatsByCategory(category: string): FormatInfo[]`
-- [ ] Typecheck passes
+- [x] Create `src/lib/formats/index.ts`
+- [x] Export `ALL_FORMATS` = [...IMAGE_FORMATS, ...AUDIO_FORMATS, ...DOCUMENT_FORMATS]
+- [x] Function `detectFormat(file: File): FormatInfo | null` — detect by extension, fallback to mimeType
+- [x] Function `getConvertibleFormats(from: FormatInfo): FormatInfo[]` — return valid output formats
+- [x] Function `getFormatByExtension(ext: string): FormatInfo | null`
+- [x] Function `getFormatsByCategory(category: string): FormatInfo[]`
+- [x] Typecheck passes
 
 ---
 

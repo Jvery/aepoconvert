@@ -112,3 +112,45 @@
 - RAW camera formats and some others are read-only (can convert FROM but not TO)
 
 ---
+
+### Iteration 7 - US-007: Create format registry for audio
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/formats/audio-formats.ts` with AUDIO_FORMATS array
+- Defined 10 audio formats with FormatInfo for each:
+  - Common: MP3, WAV, OGG Vorbis, FLAC, AAC, M4A, Opus
+  - Microsoft: WMA (read-only for output)
+  - Apple/Professional: AIFF, ALAC
+- Each format has correct extensions, mimeTypes, and canConvertTo arrays
+- WMA is treated as input-only format (can convert FROM but limited output support)
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Followed same pattern as image-formats.ts with COMMON_AUDIO_OUTPUT_FORMATS constant
+- Some formats like WMA have licensing restrictions, so they're input-only
+
+---
+
+### Iteration 8 - US-008: Create format registry for documents
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/formats/document-formats.ts` with DOCUMENT_FORMATS array
+- Defined 12 document formats with FormatInfo for each:
+  - PDF (Portable Document Format) - with limited output options
+  - Microsoft Word: DOCX, DOC
+  - Plain text: Markdown (md), Plain Text (txt)
+  - Web: HTML
+  - E-book: EPUB
+  - OpenDocument: ODT
+  - Rich Text: RTF
+  - Technical: LaTeX, reStructuredText (rst), AsciiDoc
+- Each format has correct extensions, mimeTypes, and canConvertTo arrays
+- PDF has limited conversion options (to txt, html, md only)
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- PDF is primarily a read format with limited output capabilities in Pandoc
+- Some formats like LaTeX have multiple common extensions (tex, latex)
+- AsciiDoc uses multiple extensions: adoc, asciidoc, asc
+
+---
