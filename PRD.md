@@ -440,13 +440,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want easy quality presets (Low/Medium/High).
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/settings/SimpleQualitySettings.tsx`
-- [ ] Three buttons in a row: Low (60%), Medium (80%), High (95%)
-- [ ] Visual selection indicator (filled/outlined style)
-- [ ] Update global settings in store on click
-- [ ] Show brief description under each option
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/settings/SimpleQualitySettings.tsx`
+- [x] Three buttons in a row: Low (60%), Medium (80%), High (95%)
+- [x] Visual selection indicator (filled/outlined style)
+- [x] Update global settings in store on click
+- [x] Show brief description under each option
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
