@@ -566,3 +566,67 @@
 - Badge variant can vary by category for visual distinction between file types
 
 ---
+
+### Iteration 28 - US-028: Create FormatSelector component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/files/FormatSelector.tsx` component
+- Props: currentFormat: string, availableFormats: FormatInfo[], onSelect: (format: string) => void
+- Used shadcn Select component (SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectLabel)
+- Groups formats by category (image, audio, document) using SelectGroup with SelectLabel
+- Shows format extension (uppercase) and format name in each SelectItem
+- Added aria-label for accessibility
+- Verified typecheck passes with `npm run build`
+- Verified component renders and works correctly in browser with Playwright
+
+**Learnings:**
+- Use `reduce<Record<FormatCategory, FormatInfo[]>>` to group formats by category
+- Filter out empty categories before rendering to avoid empty groups
+- SelectLabel provides category headers within SelectGroup
+- SelectValue can have custom content for displaying selected format
+
+---
+
+### Iteration 29 - US-029: Create ConversionProgress component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/files/ConversionProgress.tsx` component
+- Props: status: ConversionStatus, progress: number, error: string | null
+- Implemented four visual states:
+  - Pending: Gray dot with "Waiting to convert" text
+  - Converting: Spinner icon, percentage text, animated gradient progress bar with shimmer effect
+  - Complete: Green checkmark in circle with "Complete" text
+  - Error: Red alert icon with "Error" text and error message below
+- Added `@keyframes shimmer` animation to globals.css for progress bar shimmer effect
+- Used lucide-react icons: Loader2 (spinner), Check (checkmark), AlertCircle (error)
+- Applied gradient-bg-animated class to progress bar fill
+- Verified typecheck passes with `npm run build`
+- Verified all four states render correctly in browser with Playwright screenshot
+
+**Learnings:**
+- Custom progress bar with gradient animation uses gradient-bg-animated class on inner div
+- Shimmer effect overlay uses absolute positioning with translateX animation
+- Use consistent sizing for status icons (h-5 w-5 container, h-3 w-3 icon)
+- line-clamp-2 utility truncates error messages that are too long
+
+---
+
+### Iteration 30 - US-030: Create FileList component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/files/FileList.tsx` component
+- Reads files from conversion store using useConversionStore hook
+- Renders FileCard for each file with responsive CSS grid layout
+- Grid: 1 column on mobile, 2 columns on sm (640px+), 3 columns on lg (1024px+)
+- Empty state: shows FileX icon with "No files added yet" message and helpful subtitle
+- Updated page.tsx to include FileList component
+- Wired DropZone onFilesSelected to store's addFiles action
+- Verified typecheck passes with `npm run build`
+- Verified component works in browser: file upload displays FileCard, remove returns to empty state
+
+**Learnings:**
+- FileX icon from lucide-react works well for empty state visual
+- Responsive grid uses `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` for progressive columns
+- Early wiring of DropZone to store (via page.tsx) helps verify FileList functionality
+
+---

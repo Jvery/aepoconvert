@@ -426,13 +426,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want smooth animations when files are added or removed.
 
 **Acceptance Criteria:**
-- [ ] Install `framer-motion` package
-- [ ] Wrap FileCard in motion.div with layout animation
-- [ ] Add enter animation: fade in + slide up
-- [ ] Add exit animation: fade out + slide down
-- [ ] Use AnimatePresence for exit animations
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Install `framer-motion` package
+- [x] Wrap FileCard in motion.div with layout animation
+- [x] Add enter animation: fade in + slide up
+- [x] Add exit animation: fade out + slide down
+- [x] Use AnimatePresence for exit animations
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
