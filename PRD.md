@@ -245,12 +245,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a converter function for document operations.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/converters/document-converter.ts`
-- [ ] Export async function `convertDocument(file: File, toFormat: string): Promise<Blob>`
-- [ ] Support conversions: MD → HTML/PDF/DOCX, HTML → MD/PDF, TXT → MD/HTML
-- [ ] Use pandoc command-line syntax via WASM
-- [ ] Return converted Blob with correct mimeType
-- [ ] Typecheck passes
+- [x] Create `src/lib/converters/document-converter.ts`
+- [x] Export async function `convertDocument(file: File, toFormat: string): Promise<Blob>`
+- [x] Support conversions: MD → HTML/PDF/DOCX, HTML → MD/PDF, TXT → MD/HTML
+- [x] Use pandoc command-line syntax via WASM
+- [x] Return converted Blob with correct mimeType
+- [x] Typecheck passes
 
 ---
 
