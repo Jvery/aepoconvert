@@ -298,12 +298,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a cohesive color system for the UI.
 
 **Acceptance Criteria:**
-- [ ] Update `src/app/globals.css` with CSS variables
-- [ ] Variables: --gradient-start, --gradient-end, --gradient-accent
-- [ ] Create gradient classes: .gradient-bg, .gradient-text, .gradient-border
-- [ ] Add animated gradient keyframes for background effect
-- [ ] Dark mode variables via .dark class
-- [ ] Typecheck passes
+- [x] Update `src/app/globals.css` with CSS variables
+- [x] Variables: --gradient-start, --gradient-end, --gradient-accent
+- [x] Create gradient classes: .gradient-bg, .gradient-text, .gradient-border
+- [x] Add animated gradient keyframes for background effect
+- [x] Dark mode variables via .dark class
+- [x] Typecheck passes
 
 ---
 

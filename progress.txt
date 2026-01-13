@@ -406,3 +406,23 @@
 - Re-exports allow consumers to import from a single module while maintaining access to internals
 
 ---
+
+### Iteration 21 - US-021: Create Web Worker for conversions
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/workers/conversion-worker.ts` for running conversions in a separate thread
+- Worker receives messages: `{ type: 'convert', file: File, from: string, to: string, settings: QualitySettings }`
+- Worker posts progress updates: `{ type: 'progress', progress: number }`
+- Worker posts completion: `{ type: 'complete', blob: Blob }` or `{ type: 'error', error: string }`
+- Created `src/lib/converters/worker-client.ts` with `runConversion()` function that wraps Worker communication
+- Added `isWorkerSupported()` helper to check Web Worker availability
+- Added `convertWithWorkerFallback()` for graceful degradation when workers aren't available
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Web Workers use `new Worker(new URL('@/workers/...', import.meta.url), { type: 'module' })` pattern for ES module workers in Next.js
+- Type definitions should be exported at declaration (not re-exported at end) to avoid duplicate export errors
+- Worker client should terminate workers after completion to free resources
+- Fallback to main thread conversion provides graceful degradation for environments without Worker support
+
+---
