@@ -191,13 +191,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need FFmpeg WASM ready for audio conversion.
 
 **Acceptance Criteria:**
-- [ ] Install `@ffmpeg/ffmpeg` and `@ffmpeg/util` packages
-- [ ] Create `src/lib/converters/ffmpeg-loader.ts`
-- [ ] Async function `initializeFFmpeg(): Promise<FFmpeg>`
-- [ ] Load FFmpeg core from CDN (cdn.jsdelivr.net)
-- [ ] Export `let isFFmpegReady: boolean = false` flag
-- [ ] Check for SharedArrayBuffer support, warn if unavailable
-- [ ] Typecheck passes
+- [x] Install `@ffmpeg/ffmpeg` and `@ffmpeg/util` packages
+- [x] Create `src/lib/converters/ffmpeg-loader.ts`
+- [x] Async function `initializeFFmpeg(): Promise<FFmpeg>`
+- [x] Load FFmpeg core from CDN (cdn.jsdelivr.net)
+- [x] Export `let isFFmpegReady: boolean = false` flag
+- [x] Check for SharedArrayBuffer support, warn if unavailable
+- [x] Typecheck passes
 
 ---
 

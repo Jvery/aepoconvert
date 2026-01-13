@@ -13,6 +13,7 @@
 - next-intl: createNextIntlPlugin in next.config.ts takes path to request.ts file as argument
 - Next.js 16: "middleware" file convention is deprecated, prefer "proxy" (but still works for now)
 - @imagemagick/magick-wasm: Static `read()` is on `ImageMagick` class, not `MagickImage` class
+- @imagemagick/magick-wasm: MagickFormat has constants for modern formats (Avif, Jxl, Heic, Heif) and RAW formats (Nef, Cr2, Cr3, Arw, etc.)
 
 ## Iterations
 
@@ -235,5 +236,25 @@
 - ImageMagick.read() uses a callback pattern where the callback receives the IMagickImage instance
 - image.write(format, callback) returns data via callback, need to copy Uint8Array before it goes out of scope
 - MagickFormat is an object with format constants (e.g., MagickFormat.Png, MagickFormat.Jpeg)
+
+---
+
+### Iteration 13 - US-013: Extend ImageConverter for advanced formats
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added ICO output support (MagickFormat.Ico, image/x-icon)
+- Added AVIF output support (MagickFormat.Avif, image/avif)
+- Added JXL (JPEG XL) output support (MagickFormat.Jxl, image/jxl)
+- Added HEIC/HEIF input support (read-only) via INPUT_ONLY_FORMATS map
+- Added RAW camera format input support: NEF, CR2, CR3, ARW, DNG, ORF, RAF, RW2, PEF, SRW
+- Updated LOSSY_FORMATS to include avif and jxl for quality settings
+- Added helper functions: `isSupportedInputFormat()`, `getInputOnlyFormats()`, `getAllSupportedInputFormats()`, `isHeicFormat()`, `isRawFormat()`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- MagickFormat has constants for modern formats: Avif, Jxl, Heic, Heif
+- MagickFormat has constants for RAW formats: Nef, Cr2, Cr3, Arw, Dng, Orf, Raf, Rw2, Pef, Srw
+- Separated FORMAT_MAP (output formats) and INPUT_ONLY_FORMATS (read-only formats) for clearer architecture
+- AVIF and JXL are lossy formats that benefit from quality settings
 
 ---
