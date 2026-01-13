@@ -342,3 +342,46 @@
 - run() accepts { text, options: { from, to }, files?, citeproc? } parameters
 
 ---
+
+### Iteration 18 - US-018: Create Document converter function
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/converters/document-converter.ts` with full document conversion functionality
+- Implemented `convertDocument(file: File, toFormat: string): Promise<Blob>` function
+- Created INPUT_FORMAT_MAP and OUTPUT_FORMAT_MAP for Pandoc format name mapping
+- Supports text-based conversions: MD → HTML/DOCX/TXT, HTML → MD/TXT, TXT → MD/HTML, etc.
+- Added MIME_TYPES map for correct output blob MIME types
+- Added helper functions: `isSupportedDocumentInputFormat()`, `isSupportedDocumentOutputFormat()`, `getSupportedDocumentInputFormats()`, `getSupportedDocumentOutputFormats()`, `getDocumentMimeType()`
+- Note: PDF output is not supported in browser (requires LaTeX engine)
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Pandoc WASM cannot generate PDF directly (requires LaTeX engine or wkhtmltopdf)
+- Pandoc run() returns string for text-based output formats
+- Input format is auto-detected from file extension using detectInputFormat() helper
+- Pandoc format names differ from file extensions (e.g., 'plain' for txt, 'markdown' for md)
+
+---
+
+### Iteration 19 - US-019: Extend DocumentConverter for all formats
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added EPUB output support with base64 decoding for binary format
+- Added ODT output support with base64 decoding for binary format
+- Added RTF output support (text format)
+- Added LaTeX output support (tex/latex extensions)
+- Added RST (reStructuredText) support for both input and output
+- Added AsciiDoc support for both input and output (adoc/asciidoc/asc extensions)
+- Added `BINARY_OUTPUT_FORMATS` set to identify formats that return base64-encoded strings
+- Added `isBinaryOutputFormat()` helper function
+- Added `base64ToArrayBuffer()` helper function for decoding base64 to ArrayBuffer (avoiding SharedArrayBuffer type issues)
+- Updated `convertDocument()` to handle binary output formats differently from text formats
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Pandoc WASM returns binary formats (DOCX, EPUB, ODT) as base64-encoded strings
+- Text formats (RTF, LaTeX, RST, AsciiDoc) are returned as plain strings
+- TypeScript strict mode requires using `new ArrayBuffer()` explicitly rather than getting buffer from Uint8Array to avoid SharedArrayBuffer type incompatibility with BlobPart
+- Create a new ArrayBuffer explicitly and copy bytes into it for Blob compatibility
+
+---

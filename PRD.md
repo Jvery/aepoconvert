@@ -272,12 +272,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a single entry point for all conversions.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/converters/index.ts`
-- [ ] Export async function `convert(file: ConvertibleFile, onProgress?: (progress: number) => void): Promise<Blob>`
-- [ ] Detect converter type based on file.from category
-- [ ] Route to appropriate converter (image/audio/document)
-- [ ] Call onProgress callback during conversion
-- [ ] Typecheck passes
+- [x] Create `src/lib/converters/index.ts`
+- [x] Export async function `convert(file: ConvertibleFile, onProgress?: (progress: number) => void): Promise<Blob>`
+- [x] Detect converter type based on file.from category
+- [x] Route to appropriate converter (image/audio/document)
+- [x] Call onProgress callback during conversion
+- [x] Typecheck passes
 
 ---
 
