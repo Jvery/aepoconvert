@@ -5,6 +5,10 @@
 - Next.js 16.1.1 is installed when using `create-next-app@latest` (newer than the "14" mentioned in PRD, but compatible)
 - Strict mode is already enabled by default in new Next.js projects
 - Need to create project in temp location then copy files to avoid overwriting existing files (PRD.md, progress.txt)
+- shadcn/ui: In newer versions, `--style` flag is removed; New York is the default style
+- shadcn/ui: Use `--defaults --base-color zinc --yes` flags for non-interactive setup
+- shadcn/ui: Tailwind v4 is automatically detected and configured
+- shadcn/ui: `toast` component is deprecated, use `sonner` instead
 
 ## Iterations
 
@@ -15,5 +19,36 @@
 - Verified tsconfig.json has strict mode enabled
 - Verified `npm run dev` starts without errors
 - Verified `npm run build` (typecheck) passes
+
+---
+
+### Iteration 2 - US-002: Install and configure shadcn/ui
+**Status:** ✅ SUCCESS
+**What was done:**
+- Ran `npx shadcn@latest init --defaults --base-color zinc --yes` (New York style is now the default)
+- Verified components.json created with correct paths (style: "new-york", baseColor: "zinc")
+- Installed Button component with `npx shadcn@latest add button`
+- Updated page.tsx to render Button components (default and outline variants)
+- Verified typecheck passes with `npm run build`
+- Verified Button renders correctly in browser
+
+**Learnings:**
+- In newer shadcn versions, `--style` flag is removed; New York is the default style
+- Use `--defaults --base-color zinc --yes` flags for non-interactive setup
+- Tailwind v4 is now detected and used by shadcn
+
+---
+
+### Iteration 3 - US-003: Add essential shadcn components
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed shadcn components: card, select, slider, progress, sonner, tabs, dialog, tooltip, badge, dropdown-menu
+- Note: `toast` component is deprecated, used `sonner` as replacement
+- Verified all components are importable from `@/components/ui/*`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- The `toast` shadcn component is deprecated and replaced by `sonner`
+- Use `npx shadcn@latest add sonner` instead of `npx shadcn@latest add toast`
 
 ---

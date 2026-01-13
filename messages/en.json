@@ -1,0 +1,51 @@
+{
+  "common": {
+    "appName": "aepoconvert",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "retry": "Retry"
+  },
+  "upload": {
+    "dropzone": {
+      "title": "Drop files here or click to browse",
+      "hint": "Supported formats: images, audio, and documents"
+    },
+    "fileAdded": "Added {count} file(s)",
+    "unsupportedFormat": "Unsupported file format"
+  },
+  "convert": {
+    "button": "Convert",
+    "converting": "Converting...",
+    "complete": "Conversion complete!",
+    "download": "Download",
+    "downloadAll": "Download All",
+    "clearAll": "Clear All",
+    "status": {
+      "pending": "Pending",
+      "converting": "Converting",
+      "complete": "Complete",
+      "error": "Error"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "simple": "Simple",
+    "advanced": "Advanced",
+    "quality": {
+      "label": "Quality",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "bitrate": {
+      "label": "Bitrate"
+    },
+    "sampleRate": {
+      "label": "Sample Rate"
+    }
+  }
+}

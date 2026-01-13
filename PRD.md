@@ -57,13 +57,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need i18n infrastructure ready for future translations.
 
 **Acceptance Criteria:**
-- [ ] Install `next-intl` package
-- [ ] Create `messages/en.json` with structure: { "common": {}, "upload": {}, "convert": {}, "settings": {} }
-- [ ] Create `src/i18n/request.ts` with getRequestConfig
-- [ ] Create `src/middleware.ts` for locale routing (default: en)
-- [ ] Update `next.config.ts` with next-intl plugin
-- [ ] Wrap app layout with NextIntlClientProvider
-- [ ] Typecheck passes
+- [x] Install `next-intl` package
+- [x] Create `messages/en.json` with structure: { "common": {}, "upload": {}, "convert": {}, "settings": {} }
+- [x] Create `src/i18n/request.ts` with getRequestConfig
+- [x] Create `src/middleware.ts` for locale routing (default: en)
+- [x] Update `next.config.ts` with next-intl plugin
+- [x] Wrap app layout with NextIntlClientProvider
+- [x] Typecheck passes
 
 ---
 
