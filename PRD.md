@@ -311,14 +311,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want a clean header with logo and theme toggle.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/layout/Header.tsx`
-- [ ] Display "aepoconvert" as styled text logo (gradient or bold)
-- [ ] Theme toggle button using sun/moon icons (lucide-react)
-- [ ] Install `lucide-react` package
-- [ ] Sticky header with backdrop-blur effect
-- [ ] Update `src/app/layout.tsx` to include Header
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/layout/Header.tsx`
+- [x] Display "aepoconvert" as styled text logo (gradient or bold)
+- [x] Theme toggle button using sun/moon icons (lucide-react)
+- [x] Install `lucide-react` package
+- [x] Sticky header with backdrop-blur effect
+- [x] Update `src/app/layout.tsx` to include Header
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
