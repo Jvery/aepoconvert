@@ -71,12 +71,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need type definitions for the conversion system.
 
 **Acceptance Criteria:**
-- [ ] Create `src/types/index.ts`
-- [ ] Type `ConvertibleFile`: { id: string, file: File, name: string, size: number, from: string, to: string | null, status: ConversionStatus, progress: number, error: string | null, result: Blob | null }
-- [ ] Type `ConversionStatus`: 'pending' | 'converting' | 'complete' | 'error'
-- [ ] Type `FormatInfo`: { name: string, extensions: string[], mimeTypes: string[], category: 'image' | 'audio' | 'document', canConvertTo: string[] }
-- [ ] Type `QualitySettings`: { mode: 'simple' | 'advanced', quality: number, bitrate?: number, sampleRate?: number }
-- [ ] Typecheck passes
+- [x] Create `src/types/index.ts`
+- [x] Type `ConvertibleFile`: { id: string, file: File, name: string, size: number, from: string, to: string | null, status: ConversionStatus, progress: number, error: string | null, result: Blob | null }
+- [x] Type `ConversionStatus`: 'pending' | 'converting' | 'complete' | 'error'
+- [x] Type `FormatInfo`: { name: string, extensions: string[], mimeTypes: string[], category: 'image' | 'audio' | 'document', canConvertTo: string[] }
+- [x] Type `QualitySettings`: { mode: 'simple' | 'advanced', quality: number, bitrate?: number, sampleRate?: number }
+- [x] Typecheck passes
 
 ---
 

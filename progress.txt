@@ -9,6 +9,9 @@
 - shadcn/ui: Use `--defaults --base-color zinc --yes` flags for non-interactive setup
 - shadcn/ui: Tailwind v4 is automatically detected and configured
 - shadcn/ui: `toast` component is deprecated, use `sonner` instead
+- next-intl: Need to create src/i18n/routing.ts with defineRouting for middleware configuration
+- next-intl: createNextIntlPlugin in next.config.ts takes path to request.ts file as argument
+- Next.js 16: "middleware" file convention is deprecated, prefer "proxy" (but still works for now)
 
 ## Iterations
 
@@ -50,5 +53,25 @@
 **Learnings:**
 - The `toast` shadcn component is deprecated and replaced by `sonner`
 - Use `npx shadcn@latest add sonner` instead of `npx shadcn@latest add toast`
+
+---
+
+### Iteration 4 - US-004: Setup i18n architecture with next-intl
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `next-intl` package
+- Created `messages/en.json` with common, upload, convert, settings sections
+- Created `src/i18n/request.ts` with getRequestConfig for locale loading
+- Created `src/i18n/routing.ts` with defineRouting configuration (locales: ['en'], defaultLocale: 'en')
+- Created `src/middleware.ts` for locale routing using createMiddleware
+- Updated `next.config.ts` with createNextIntlPlugin wrapper
+- Wrapped app layout with NextIntlClientProvider using getLocale() and getMessages()
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- next-intl requires both routing.ts and request.ts configuration files
+- createNextIntlPlugin takes path to request.ts as argument
+- NextIntlClientProvider requires async layout function with getLocale() and getMessages() from 'next-intl/server'
+- Next.js 16.1.1 shows deprecation warning for "middleware" file convention, recommending "proxy" instead
 
 ---
