@@ -84,12 +84,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a registry of supported image formats.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/formats/image-formats.ts`
-- [ ] Define IMAGE_FORMATS array with FormatInfo for: png, jpeg, jpg, webp, gif, bmp, tiff, tif, ico, svg, avif, heic, heif, jxl, psd, raw camera formats (nef, cr2, arw, dng, etc.)
-- [ ] Each format has correct extensions array and mimeTypes
-- [ ] Each format has canConvertTo array listing compatible output formats
-- [ ] Export `IMAGE_FORMATS` constant (at least 30 formats)
-- [ ] Typecheck passes
+- [x] Create `src/lib/formats/image-formats.ts`
+- [x] Define IMAGE_FORMATS array with FormatInfo for: png, jpeg, jpg, webp, gif, bmp, tiff, tif, ico, svg, avif, heic, heif, jxl, psd, raw camera formats (nef, cr2, arw, dng, etc.)
+- [x] Each format has correct extensions array and mimeTypes
+- [x] Each format has canConvertTo array listing compatible output formats
+- [x] Export `IMAGE_FORMATS` constant (at least 30 formats)
+- [x] Typecheck passes
 
 ---
 
