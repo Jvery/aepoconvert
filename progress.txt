@@ -75,3 +75,40 @@
 - Next.js 16.1.1 shows deprecation warning for "middleware" file convention, recommending "proxy" instead
 
 ---
+
+### Iteration 5 - US-005: Define TypeScript types for file conversion
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/types/index.ts` with all required type definitions
+- Defined `ConversionStatus` type: 'pending' | 'converting' | 'complete' | 'error'
+- Defined `ConvertibleFile` interface with all required properties (id, file, name, size, from, to, status, progress, error, result)
+- Defined `FormatInfo` interface with name, extensions, mimeTypes, category, canConvertTo
+- Defined `QualitySettings` interface with mode, quality, bitrate?, sampleRate?
+- Added `FormatCategory` type for better type safety
+- Added `QualityMode` type for better type safety
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Added helper types (FormatCategory, QualityMode) to make the code more readable and maintainable
+- All types documented with JSDoc comments for better IDE support
+
+---
+
+### Iteration 6 - US-006: Create format registry for images
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/formats/image-formats.ts` with IMAGE_FORMATS array
+- Defined 40 image formats with FormatInfo for each:
+  - Web formats: PNG, JPEG, WebP, GIF, BMP
+  - Professional: TIFF, ICO, SVG, PSD
+  - Modern: AVIF, JPEG XL, HEIC, HEIF
+  - RAW camera: NEF, CR2, CR3, ARW, DNG, ORF, RAF, RW2, PEF, SRW, ERF, NRW, KDC, DCR, MRW, 3FR, X3F
+  - Other: TGA, PCX, PPM, PGM, PBM, PAM, XBM, XPM, EXR, HDR
+- Each format has correct extensions, mimeTypes, and canConvertTo arrays
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Created COMMON_OUTPUT_FORMATS constant to reduce duplication for read-only formats
+- RAW camera formats and some others are read-only (can convert FROM but not TO)
+
+---

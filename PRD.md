@@ -97,12 +97,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a registry of supported audio formats.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/formats/audio-formats.ts`
-- [ ] Define AUDIO_FORMATS array with FormatInfo for: mp3, wav, ogg, flac, aac, m4a, opus, wma, aiff, alac
-- [ ] Each format has correct extensions and mimeTypes
-- [ ] Each format has canConvertTo array
-- [ ] Export `AUDIO_FORMATS` constant
-- [ ] Typecheck passes
+- [x] Create `src/lib/formats/audio-formats.ts`
+- [x] Define AUDIO_FORMATS array with FormatInfo for: mp3, wav, ogg, flac, aac, m4a, opus, wma, aiff, alac
+- [x] Each format has correct extensions and mimeTypes
+- [x] Each format has canConvertTo array
+- [x] Export `AUDIO_FORMATS` constant
+- [x] Typecheck passes
 
 ---
 
