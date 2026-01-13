@@ -258,13 +258,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need full document format support.
 
 **Acceptance Criteria:**
-- [ ] Add EPUB output support
-- [ ] Add ODT output support
-- [ ] Add RTF output support
-- [ ] Add LaTeX output support
-- [ ] Add RST (reStructuredText) support
-- [ ] Add AsciiDoc support
-- [ ] Typecheck passes
+- [x] Add EPUB output support
+- [x] Add ODT output support
+- [x] Add RTF output support
+- [x] Add LaTeX output support
+- [x] Add RST (reStructuredText) support
+- [x] Add AsciiDoc support
+- [x] Typecheck passes
 
 ---
 

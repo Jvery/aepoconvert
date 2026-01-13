@@ -74,6 +74,37 @@ const MIME_TYPES: Record<string, string> = {
 };
 
 /**
+ * Binary output formats that require base64 decoding
+ * These formats are returned as base64-encoded strings by Pandoc WASM
+ */
+const BINARY_OUTPUT_FORMATS: Set<string> = new Set([
+  'docx',
+  'epub',
+  'odt',
+]);
+
+/**
+ * Check if a format produces binary output
+ */
+function isBinaryOutputFormat(format: string): boolean {
+  return BINARY_OUTPUT_FORMATS.has(format.toLowerCase());
+}
+
+/**
+ * Decode base64 string to ArrayBuffer
+ * Returns a fresh ArrayBuffer (not SharedArrayBuffer) for Blob compatibility
+ */
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binaryString = atob(base64);
+  const buffer = new ArrayBuffer(binaryString.length);
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return buffer;
+}
+
+/**
  * Check if a format is supported for input
  */
 export function isSupportedDocumentInputFormat(format: string): boolean {
@@ -193,9 +224,18 @@ export async function convertDocument(
     const mimeType = getDocumentMimeType(normalizedFormat);
 
     // Create Blob from result
-    // Result is a string for text-based formats
-    const outputData = typeof result === 'string' ? result : String(result);
-    const blob = new Blob([outputData], { type: mimeType });
+    // Binary formats (docx, epub, odt) are returned as base64-encoded strings
+    // Text formats are returned as plain strings
+    let blob: Blob;
+    if (isBinaryOutputFormat(normalizedFormat)) {
+      // Decode base64 to binary ArrayBuffer
+      const binaryData = base64ToArrayBuffer(result);
+      blob = new Blob([binaryData], { type: mimeType });
+    } else {
+      // Text-based format
+      const outputData = typeof result === 'string' ? result : String(result);
+      blob = new Blob([outputData], { type: mimeType });
+    }
 
     console.log(
       `[Document Converter] Conversion complete: ${file.name} -> ${normalizedFormat} (${blob.size} bytes)`
