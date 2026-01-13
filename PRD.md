@@ -110,12 +110,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a registry of supported document formats.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/formats/document-formats.ts`
-- [ ] Define DOCUMENT_FORMATS array with FormatInfo for: pdf, docx, doc, md, txt, html, epub, odt, rtf, latex, rst, asciidoc
-- [ ] Each format has correct extensions and mimeTypes
-- [ ] Each format has canConvertTo array
-- [ ] Export `DOCUMENT_FORMATS` constant
-- [ ] Typecheck passes
+- [x] Create `src/lib/formats/document-formats.ts`
+- [x] Define DOCUMENT_FORMATS array with FormatInfo for: pdf, docx, doc, md, txt, html, epub, odt, rtf, latex, rst, asciidoc
+- [x] Each format has correct extensions and mimeTypes
+- [x] Each format has canConvertTo array
+- [x] Export `DOCUMENT_FORMATS` constant
+- [x] Typecheck passes
 
 ---
 
