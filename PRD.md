@@ -164,13 +164,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need a converter class for image operations.
 
 **Acceptance Criteria:**
-- [ ] Create `src/lib/converters/image-converter.ts`
-- [ ] Export async function `convertImage(file: File, toFormat: string, quality: number): Promise<Blob>`
-- [ ] Use ImageMagick read() and write() methods
-- [ ] Support formats: PNG, JPEG, WEBP, GIF, BMP, TIFF
-- [ ] Apply quality setting for lossy formats
-- [ ] Return converted Blob with correct mimeType
-- [ ] Typecheck passes
+- [x] Create `src/lib/converters/image-converter.ts`
+- [x] Export async function `convertImage(file: File, toFormat: string, quality: number): Promise<Blob>`
+- [x] Use ImageMagick read() and write() methods
+- [x] Support formats: PNG, JPEG, WEBP, GIF, BMP, TIFF
+- [x] Apply quality setting for lossy formats
+- [x] Return converted Blob with correct mimeType
+- [x] Typecheck passes
 
 ---
 

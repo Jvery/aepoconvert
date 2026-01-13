@@ -12,6 +12,7 @@
 - next-intl: Need to create src/i18n/routing.ts with defineRouting for middleware configuration
 - next-intl: createNextIntlPlugin in next.config.ts takes path to request.ts file as argument
 - Next.js 16: "middleware" file convention is deprecated, prefer "proxy" (but still works for now)
+- @imagemagick/magick-wasm: Static `read()` is on `ImageMagick` class, not `MagickImage` class
 
 ## Iterations
 
@@ -170,5 +171,69 @@
 **Learnings:**
 - Used type guard `filter((format): format is FormatInfo => format !== null)` to properly type-narrow filtered results
 - Accepted both `FormatCategory` and `string` for category parameter for flexibility
+
+---
+
+### Iteration 10 - US-010: Create conversion store with Zustand
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `zustand` and `immer` packages
+- Created `src/store/conversion-store.ts` with full state management
+- Defined state shape: { files: ConvertibleFile[], isConverting: boolean, globalSettings: QualitySettings }
+- Implemented all required actions:
+  - `addFiles(files: File[])` - adds files with auto-generated IDs and detected format
+  - `removeFile(id: string)` - removes file by ID
+  - `updateFile(id: string, updates)` - partial update of file properties
+  - `setOutputFormat(id: string, format)` - sets target format for a file
+  - `setGlobalSettings(settings)` - updates global quality settings
+  - `startConversion()` - marks pending files as converting
+  - `clearAll()` - clears all files and resets state
+- Used immer middleware for immutable state updates
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Zustand with immer: import from 'zustand/middleware/immer' for immer middleware
+- Use `set((state) => { state.prop = value })` pattern with immer for mutations
+- generateId() helper for unique file IDs using timestamp + random string
+
+---
+
+### Iteration 11 - US-011: Setup ImageMagick WASM loader
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `@imagemagick/magick-wasm` package (v0.0.37)
+- Created `src/lib/converters/magick-loader.ts`
+- Implemented `initializeMagick()` async function that loads WASM from jsDelivr CDN
+- Exported `isMagickReady` boolean flag, updated after successful initialization
+- Added proper error handling and logging with detailed error messages
+- Added initialization deduplication to prevent multiple concurrent init calls
+- Added helper functions: `checkMagickReady()` and `resetMagickState()`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- @imagemagick/magick-wasm v0.0.37 exports `initializeImageMagick(wasmLocation)` that accepts URL, ByteArray, or WebAssembly.Module
+- Use jsDelivr CDN (cdn.jsdelivr.net/npm/...) for reliable WASM binary delivery
+- Need to track initialization state with multiple flags (isInitializing, isMagickReady, initPromise) to handle concurrent calls
+
+---
+
+### Iteration 12 - US-012: Create ImageMagick converter class
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/converters/image-converter.ts`
+- Implemented `convertImage(file: File, toFormat: string, quality: number): Promise<Blob>` function
+- Used ImageMagick.read() static method to read source bytes into an image
+- Used image.write() method with target MagickFormat to write converted data
+- Defined FORMAT_MAP to map lowercase extensions to MagickFormat constants (png, jpeg, jpg, webp, gif, bmp, tiff, tif)
+- Defined MIME_TYPE_MAP for correct output blob MIME types
+- Applied quality setting for lossy formats (jpeg, jpg, webp) via image.quality property
+- Added helper functions: `isSupportedOutputFormat()`, `getSupportedOutputFormats()`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Static `read()` method is on `ImageMagick` class, not `MagickImage` class
+- ImageMagick.read() uses a callback pattern where the callback receives the IMagickImage instance
+- image.write(format, callback) returns data via callback, need to copy Uint8Array before it goes out of scope
+- MagickFormat is an object with format constants (e.g., MagickFormat.Png, MagickFormat.Jpeg)
 
 ---
