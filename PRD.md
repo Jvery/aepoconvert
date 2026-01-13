@@ -412,13 +412,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to see all my uploaded files in a list.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/files/FileList.tsx`
-- [ ] Read files from conversion store using useConversionStore hook
-- [ ] Render FileCard for each file
-- [ ] Empty state: show message "No files added yet"
-- [ ] Use CSS grid or flex for layout
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/files/FileList.tsx`
+- [x] Read files from conversion store using useConversionStore hook
+- [x] Render FileCard for each file
+- [x] Empty state: show message "No files added yet"
+- [x] Use CSS grid or flex for layout
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
