@@ -151,12 +151,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need ImageMagick WASM ready for image conversion.
 
 **Acceptance Criteria:**
-- [ ] Install `@imagemagick/magick-wasm` package
-- [ ] Create `src/lib/converters/magick-loader.ts`
-- [ ] Async function `initializeMagick(): Promise<void>` that calls `initializeImageMagick()` with wasm from CDN
-- [ ] Export `let isMagickReady: boolean = false` flag updated after init
-- [ ] Handle and log initialization errors
-- [ ] Typecheck passes
+- [x] Install `@imagemagick/magick-wasm` package
+- [x] Create `src/lib/converters/magick-loader.ts`
+- [x] Async function `initializeMagick(): Promise<void>` that calls `initializeImageMagick()` with wasm from CDN
+- [x] Export `let isMagickReady: boolean = false` flag updated after init
+- [x] Handle and log initialization errors
+- [x] Typecheck passes
 
 ---
 
