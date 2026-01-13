@@ -220,12 +220,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need full audio format support.
 
 **Acceptance Criteria:**
-- [ ] Add OPUS output support (libopus codec)
-- [ ] Add WMA output support (wmav2 codec)
-- [ ] Add AIFF output support (pcm_s16be codec)
-- [ ] Add ALAC output support (alac codec in m4a container)
-- [ ] Apply sample rate setting (-ar) when provided
-- [ ] Typecheck passes
+- [x] Add OPUS output support (libopus codec)
+- [x] Add WMA output support (wmav2 codec)
+- [x] Add AIFF output support (pcm_s16be codec)
+- [x] Add ALAC output support (alac codec in m4a container)
+- [x] Apply sample rate setting (-ar) when provided
+- [x] Typecheck passes
 
 ---
 

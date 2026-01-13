@@ -13,7 +13,7 @@ import { initializeFFmpeg } from './ffmpeg-loader';
  */
 const FORMAT_CONFIG: Record<
   string,
-  { codec: string; extension: string; mimeType: string }
+  { codec: string; extension: string; mimeType: string; container?: string }
 > = {
   mp3: {
     codec: 'libmp3lame',
@@ -45,6 +45,33 @@ const FORMAT_CONFIG: Record<
     extension: 'm4a',
     mimeType: 'audio/mp4',
   },
+  // US-016: Extended audio format support
+  opus: {
+    codec: 'libopus',
+    extension: 'opus',
+    mimeType: 'audio/opus',
+  },
+  wma: {
+    codec: 'wmav2',
+    extension: 'wma',
+    mimeType: 'audio/x-ms-wma',
+  },
+  aiff: {
+    codec: 'pcm_s16be',
+    extension: 'aiff',
+    mimeType: 'audio/aiff',
+  },
+  aif: {
+    codec: 'pcm_s16be',
+    extension: 'aif',
+    mimeType: 'audio/aiff',
+  },
+  alac: {
+    codec: 'alac',
+    extension: 'm4a',
+    mimeType: 'audio/mp4',
+    container: 'ipod', // ALAC requires m4a container (uses -f ipod)
+  },
 };
 
 /**
@@ -57,12 +84,18 @@ const MIME_TYPES: Record<string, string> = {
   flac: 'audio/flac',
   aac: 'audio/aac',
   m4a: 'audio/mp4',
+  // US-016: Extended audio format MIME types
+  opus: 'audio/opus',
+  wma: 'audio/x-ms-wma',
+  aiff: 'audio/aiff',
+  aif: 'audio/aiff',
+  alac: 'audio/mp4', // ALAC is wrapped in m4a container
 };
 
 /**
  * Formats that support bitrate settings
  */
-const BITRATE_SUPPORTED_FORMATS = ['mp3', 'aac', 'm4a', 'ogg'];
+const BITRATE_SUPPORTED_FORMATS = ['mp3', 'aac', 'm4a', 'ogg', 'opus', 'wma'];
 
 /**
  * Check if a format is supported for output
@@ -122,6 +155,11 @@ function buildFFmpegArgs(
     // Quality 100 = 320kbps, Quality 50 = 160kbps, Quality 1 = 64kbps
     const bitrate = Math.round(64 + ((settings.quality - 1) / 99) * 256);
     args.push('-b:a', `${bitrate}k`);
+  }
+
+  // Apply container format if specified (e.g., ALAC needs ipod/m4a container)
+  if (config.container) {
+    args.push('-f', config.container);
   }
 
   // Overwrite output file without asking

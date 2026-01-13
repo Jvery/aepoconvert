@@ -16,6 +16,7 @@
 - @imagemagick/magick-wasm: MagickFormat has constants for modern formats (Avif, Jxl, Heic, Heif) and RAW formats (Nef, Cr2, Cr3, Arw, etc.)
 - @ffmpeg/ffmpeg: Use FFmpeg class with load() method; use toBlobURL from @ffmpeg/util for CORS-safe CDN loading
 - @ffmpeg/ffmpeg: Multi-threading requires SharedArrayBuffer (check window.crossOriginIsolated)
+- @ffmpeg/ffmpeg: readFile() returns Uint8Array with SharedArrayBuffer; use `new Uint8Array(data).buffer` for clean ArrayBuffer for Blob
 
 ## Iterations
 
@@ -279,5 +280,25 @@
 - Use @ffmpeg/util's toBlobURL() to convert CDN URLs to blob URLs (avoids CORS and MIME type issues)
 - FFmpeg requires SharedArrayBuffer for multi-threading; check window.crossOriginIsolated for header presence
 - Worker is optional and only used when SharedArrayBuffer is available
+
+---
+
+### Iteration 15 - US-015: Create Audio converter function
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/converters/audio-converter.ts`
+- Implemented `convertAudio(file: File, toFormat: string, settings: QualitySettings): Promise<Blob>`
+- Created FORMAT_CONFIG map with codec settings for MP3, WAV, OGG, FLAC, AAC, M4A
+- Writes input file to FFmpeg virtual FS and reads output after conversion
+- Builds FFmpeg command with `-c:a` for codec, `-b:a` for bitrate, `-ar` for sample rate
+- Applies bitrate from settings or calculates from quality (1-100 maps to 64-320 kbps)
+- Cleans up temporary files in virtual filesystem after conversion
+- Added helper functions: `isSupportedAudioOutputFormat()`, `getSupportedAudioOutputFormats()`, `getAudioMimeType()`
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- FFmpeg.readFile() returns Uint8Array which may have SharedArrayBuffer backing; use `new Uint8Array(data).buffer` to get clean ArrayBuffer for Blob creation
+- FFmpeg virtual FS needs explicit writeFile() before exec() and readFile() after
+- Always clean up virtual FS files in finally block to prevent memory leaks
 
 ---
