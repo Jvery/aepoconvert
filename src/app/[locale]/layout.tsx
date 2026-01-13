@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
+import { Toaster } from '@/components/ui/sonner';
 import "../globals.css";
 
 const geistSans = Geist({
@@ -47,6 +48,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <main className="min-h-[calc(100vh-3.5rem)]">
             {children}
           </main>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

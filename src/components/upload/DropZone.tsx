@@ -2,6 +2,8 @@
 
 import { useRef, useCallback, useState } from 'react';
 import { Upload } from 'lucide-react';
+import { toast } from 'sonner';
+import { detectFormat, ALL_FORMATS } from '@/lib/formats';
 
 export interface DropZoneProps {
   /** Callback when files are dropped or selected */
@@ -13,9 +15,34 @@ export interface DropZoneProps {
 }
 
 /**
+ * Get accepted file extensions as a comma-separated string for display
+ */
+function getAcceptedExtensions(): string {
+  const extensions = ALL_FORMATS.flatMap((format) => format.extensions);
+  // Get unique extensions and return first 15 for display
+  const unique = [...new Set(extensions)];
+  const displayed = unique.slice(0, 15);
+  const remaining = unique.length - displayed.length;
+  const ext = displayed.map((e) => `.${e}`).join(', ');
+  return remaining > 0 ? `${ext} and ${remaining}+ more` : ext;
+}
+
+/**
+ * Get accept attribute string for file input
+ */
+function getAcceptAttribute(): string {
+  const extensions = ALL_FORMATS.flatMap((format) => format.extensions);
+  const mimeTypes = ALL_FORMATS.flatMap((format) => format.mimeTypes);
+  const uniqueExtensions = [...new Set(extensions)].map((e) => `.${e}`);
+  const uniqueMimeTypes = [...new Set(mimeTypes)];
+  return [...uniqueExtensions, ...uniqueMimeTypes].join(',');
+}
+
+/**
  * DropZone component for drag-and-drop file upload
  * Large rectangular drop area with dashed border
  * Visual feedback on drag-over with color and scale animation
+ * Filters files by supported formats and shows toast for unsupported files
  */
 export function DropZone({ onFilesSelected, disabled = false, className = '' }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -25,8 +52,39 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
   const handleFiles = useCallback(
     (files: FileList | null) => {
       if (!files || files.length === 0 || disabled) return;
+
       const fileArray = Array.from(files);
-      onFilesSelected?.(fileArray);
+      const supportedFiles: File[] = [];
+      const unsupportedFiles: string[] = [];
+
+      // Filter files by supported formats
+      for (const file of fileArray) {
+        const format = detectFormat(file);
+        if (format) {
+          supportedFiles.push(file);
+        } else {
+          unsupportedFiles.push(file.name);
+        }
+      }
+
+      // Show toast for unsupported files
+      if (unsupportedFiles.length > 0) {
+        const count = unsupportedFiles.length;
+        const names = unsupportedFiles.slice(0, 3).join(', ');
+        const message = count === 1
+          ? `"${names}" is not a supported format`
+          : count <= 3
+            ? `${names} are not supported formats`
+            : `${names} and ${count - 3} more files are not supported`;
+        toast.error('Unsupported file format', {
+          description: message,
+        });
+      }
+
+      // Only call callback with supported files
+      if (supportedFiles.length > 0) {
+        onFilesSelected?.(supportedFiles);
+      }
     },
     [onFilesSelected, disabled]
   );
@@ -136,6 +194,9 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
         <p className="mt-1 text-sm text-muted-foreground">
           Supports images, audio, and documents
         </p>
+        <p className="mt-2 text-xs text-muted-foreground/70">
+          {getAcceptedExtensions()}
+        </p>
       </div>
 
       {/* Hidden file input */}
@@ -143,6 +204,7 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
         ref={inputRef}
         type="file"
         multiple
+        accept={getAcceptAttribute()}
         onChange={handleInputChange}
         className="sr-only"
         tabIndex={-1}

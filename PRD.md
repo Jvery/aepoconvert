@@ -354,13 +354,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want only supported files to be accepted.
 
 **Acceptance Criteria:**
-- [ ] Filter dropped files by supported extensions using detectFormat()
-- [ ] Show toast error for unsupported files using shadcn toast
-- [ ] Configure Toaster in layout.tsx
-- [ ] Install `sonner` for toast notifications
-- [ ] Display hint text showing accepted file types
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Filter dropped files by supported extensions using detectFormat()
+- [x] Show toast error for unsupported files using shadcn toast
+- [x] Configure Toaster in layout.tsx
+- [x] Install `sonner` for toast notifications
+- [x] Display hint text showing accepted file types
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
