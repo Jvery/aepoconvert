@@ -326,14 +326,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to drag-and-drop files to start conversion.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/upload/DropZone.tsx`
-- [ ] Large rectangular drop area (min-height: 200px)
-- [ ] Dashed border with rounded corners
-- [ ] Icon and text: "Drop files here or click to browse"
-- [ ] Accept multiple files via input[type=file]
-- [ ] onDrop and onClick handlers
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/upload/DropZone.tsx`
+- [x] Large rectangular drop area (min-height: 200px)
+- [x] Dashed border with rounded corners
+- [x] Icon and text: "Drop files here or click to browse"
+- [x] Accept multiple files via input[type=file]
+- [x] onDrop and onClick handlers
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
