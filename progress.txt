@@ -385,3 +385,24 @@
 - Create a new ArrayBuffer explicitly and copy bytes into it for Blob compatibility
 
 ---
+
+### Iteration 20 - US-020: Create unified Converter facade
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/lib/converters/index.ts` as the unified entry point for all conversions
+- Implemented `convert(file: ConvertibleFile, onProgress?, settings?): Promise<Blob>` function
+- Created `detectCategory()` helper function that determines category from file format or MIME type
+- Routing logic for image → convertImage, audio → convertAudio, document → convertDocument
+- Progress callback called at 0%, 10%, and 100% during conversion
+- Added `getConverterStatus()` function to check which converters are ready
+- Added `initializeAllConverters()` function for preloading all WASM libraries at startup
+- Re-exported individual converters and loaders for direct access when needed
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Using `detectFormat()` from formats utility provides category information from FormatInfo
+- Fallback to MIME type prefix (image/, audio/, text/) when format detection fails
+- Document converter doesn't need quality settings, but image and audio do
+- Re-exports allow consumers to import from a single module while maintaining access to internals
+
+---

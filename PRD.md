@@ -285,12 +285,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need conversions to run in a Web Worker to prevent UI blocking.
 
 **Acceptance Criteria:**
-- [ ] Create `src/workers/conversion-worker.ts`
-- [ ] Worker receives message: { type: 'convert', file: File, from: string, to: string, settings: QualitySettings }
-- [ ] Worker posts progress updates: { type: 'progress', progress: number }
-- [ ] Worker posts result: { type: 'complete', blob: Blob } or { type: 'error', error: string }
-- [ ] Create `src/lib/converters/worker-client.ts` with `runConversion()` that wraps Worker communication
-- [ ] Typecheck passes
+- [x] Create `src/workers/conversion-worker.ts`
+- [x] Worker receives message: { type: 'convert', file: File, from: string, to: string, settings: QualitySettings }
+- [x] Worker posts progress updates: { type: 'progress', progress: number }
+- [x] Worker posts result: { type: 'complete', blob: Blob } or { type: 'error', error: string }
+- [x] Create `src/lib/converters/worker-client.ts` with `runConversion()` that wraps Worker communication
+- [x] Typecheck passes
 
 ---
 
