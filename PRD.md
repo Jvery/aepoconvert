@@ -383,13 +383,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to choose the output format for my file.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/files/FormatSelector.tsx`
-- [ ] Props: currentFormat: string, availableFormats: FormatInfo[], onSelect: (format: string) => void
-- [ ] Use shadcn Select component
-- [ ] Group formats by category in SelectGroup
-- [ ] Show format name and extension in SelectItem
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/files/FormatSelector.tsx`
+- [x] Props: currentFormat: string, availableFormats: FormatInfo[], onSelect: (format: string) => void
+- [x] Use shadcn Select component
+- [x] Group formats by category in SelectGroup
+- [x] Show format name and extension in SelectItem
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

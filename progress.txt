@@ -497,3 +497,72 @@
 - Reset file input value after selection to allow re-selecting same file
 
 ---
+
+### Iteration 25 - US-025: Add drag-over visual feedback to DropZone
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added `isDragging` state using useState hook to track drag state
+- Added `dragCounter` ref to properly handle nested drag events (prevents flicker)
+- Implemented `handleDragEnter` handler that increments counter and sets isDragging=true
+- Implemented `handleDragLeave` handler that decrements counter and sets isDragging=false when counter reaches 0
+- Updated `handleDrop` to reset dragCounter and isDragging state
+- Added visual feedback when isDragging:
+  - Border changes to accent color: `border-primary`
+  - Background lightens: `bg-primary/10`
+  - Subtle scale transform: `scale-[1.02]`
+- Changed transition to `transition-all` for smooth animation of all properties
+- Verified typecheck passes with `npm run build`
+- Verified component renders correctly in browser
+
+**Learnings:**
+- Use dragCounter ref pattern to handle nested drag events - dragEnter fires for each child element
+- Only set isDragging=true when counter becomes 1, set to false when counter returns to 0
+- Reset counter to 0 in handleDrop to ensure clean state after drop
+- transition-all with duration-200 and ease-out provides smooth visual feedback
+
+---
+
+### Iteration 26 - US-026: Add file type validation to DropZone
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added file filtering by supported extensions using `detectFormat()` from formats utility
+- Imported `toast` from sonner for error notifications
+- Implemented logic to separate supported and unsupported files
+- Show descriptive toast.error() for unsupported files with file names
+- Configured Toaster component in `src/app/[locale]/layout.tsx`
+- Added `getAcceptedExtensions()` helper to display first 15 extensions + count of remaining
+- Added `getAcceptAttribute()` helper to generate accept attribute for file input
+- Added hint text showing accepted file types below the drop zone subtitle
+- Added `accept` attribute to file input for browser-level filtering
+- Verified typecheck passes with `npm run build`
+- Verified component renders correctly in browser with Playwright
+
+**Learnings:**
+- sonner toast is already configured as shadcn/ui component (replaces deprecated toast)
+- Use `toast.error(title, { description })` pattern for rich error messages
+- Generate accept attribute from ALL_FORMATS to dynamically support all registered formats
+- Show first 15 extensions in hint text to keep it readable, with "+ more" count for remaining
+
+---
+
+### Iteration 27 - US-027: Create FileCard component
+**Status:** SUCCESS
+**What was done:**
+- Created `src/components/files/FileCard.tsx` component
+- Props: file: ConvertibleFile, onRemove: () => void, onFormatChange: (format: string) => void
+- Display file type icon based on category using lucide-react (FileImage, FileAudio, FileText, File)
+- Show truncated file name preserving extension (truncateFileName helper)
+- Format file size as human-readable KB/MB/GB (formatFileSize helper)
+- Display detected format as Badge with category-based variant (default/secondary/outline)
+- Remove button (X icon) in top-right corner with hover effects (opacity + destructive color)
+- Uses shadcn Card component with subtle shadow and hover:shadow-md transition
+- Verified typecheck passes with `npm run build`
+- Verified component renders correctly in browser with Playwright screenshot
+
+**Learnings:**
+- Use lucide-react icons: FileImage, FileAudio, FileText for category-based file icons
+- truncateFileName should preserve file extension when truncating long names
+- formatFileSize: use Math.log to calculate appropriate unit (B, KB, MB, GB, TB)
+- Badge variant can vary by category for visual distinction between file types
+
+---
