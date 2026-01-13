@@ -397,14 +397,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to see conversion progress for each file.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/files/ConversionProgress.tsx`
-- [ ] Props: status: ConversionStatus, progress: number, error: string | null
-- [ ] Show shadcn Progress bar when status is 'converting'
-- [ ] Show checkmark icon and "Complete" text when status is 'complete'
-- [ ] Show error icon and error message when status is 'error'
-- [ ] Animated gradient on progress bar
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/files/ConversionProgress.tsx`
+- [x] Props: status: ConversionStatus, progress: number, error: string | null
+- [x] Show shadcn Progress bar when status is 'converting'
+- [x] Show checkmark icon and "Complete" text when status is 'complete'
+- [x] Show error icon and error message when status is 'error'
+- [x] Animated gradient on progress bar
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

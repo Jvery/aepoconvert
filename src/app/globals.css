@@ -156,6 +156,15 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Gradient utility classes */
 @layer utilities {
   .gradient-bg {
