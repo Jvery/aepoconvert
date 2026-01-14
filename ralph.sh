@@ -1,5 +1,5 @@
 #!/bin/bash
-# Ralph Loop - ASCII TUI with live streaming
+# Ralph Loop - ASCII TUI with live streaming and timer
 
 MAX=${1:-100}
 SLEEP=${2:-2}
@@ -9,7 +9,6 @@ STUCK_THRESHOLD=${3:-5}
 RED='\e[31m'
 GREEN='\e[32m'
 YELLOW='\e[33m'
-BLUE='\e[34m'
 CYAN='\e[36m'
 BOLD='\e[1m'
 DIM='\e[2m'
@@ -18,11 +17,10 @@ NC='\e[0m'
 # === ПЕРЕМЕННЫЕ ===
 iteration=0
 consecutive_failures=0
-current_us=""
-current_criterion=""
-last_status="starting"
 start_time=$(date +%s)
 output_file=""
+tail_pid=""
+timer_pid=""
 
 # === PROMPT TEMPLATE ===
 PROMPT_TEMPLATE='You are Ralph, an autonomous coding agent. Execute exactly ONE task per iteration.
@@ -62,39 +60,47 @@ After completing, check PRD.md:
 
 # === ФУНКЦИИ ПОДСЧЕТА ===
 count_remaining() {
-    local count
-    count=$(grep -c '^\- \[ \]' PRD.md 2>/dev/null || echo "0")
-    echo "$count" | grep -oE '^[0-9]+' | head -1 || echo "0"
+    grep -c '^\- \[ \]' PRD.md 2>/dev/null | grep -oE '[0-9]+' | head -1 || echo "0"
 }
 
 count_completed() {
-    local count
-    count=$(grep -c '^\- \[x\]' PRD.md 2>/dev/null || echo "0")
-    echo "$count" | grep -oE '^[0-9]+' | head -1 || echo "0"
-}
-
-get_current_us() {
-    local us_line=""
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^###[[:space:]]+(US-[0-9]+.*) ]]; then
-            us_line="${BASH_REMATCH[1]}"
-        fi
-        if [[ "$line" =~ ^-[[:space:]]\[[[:space:]]\] ]] && [[ -n "$us_line" ]]; then
-            echo "$us_line"
-            return
-        fi
-    done < PRD.md
-    echo "No pending tasks"
-}
-
-get_current_criterion() {
-    grep -m1 '^\- \[ \]' PRD.md 2>/dev/null | sed 's/^- \[ \] //' || echo "None"
+    grep -c '^\- \[x\]' PRD.md 2>/dev/null | grep -oE '[0-9]+' | head -1 || echo "0"
 }
 
 get_elapsed() {
-    local now=$(($(date +%s)))
+    local now=$(date +%s)
     local diff=$((now - start_time))
     printf "%02d:%02d:%02d" $((diff/3600)) $(((diff%3600)/60)) $((diff%60))
+}
+
+# === ПОЛУЧИТЬ ТЕКУЩУЮ ЗАДАЧУ (ПОЛНЫЙ БЛОК) ===
+get_current_task_block() {
+    local first_incomplete_line=$(grep -n '^\- \[ \]' PRD.md 2>/dev/null | head -1 | cut -d: -f1)
+    
+    if [[ -z "$first_incomplete_line" ]]; then
+        echo "No pending tasks"
+        return
+    fi
+    
+    local us_line=$(head -n "$first_incomplete_line" PRD.md | grep -n '^### US-' | tail -1)
+    local us_line_num=$(echo "$us_line" | cut -d: -f1)
+    
+    if [[ -z "$us_line_num" ]]; then
+        echo "No User Story found"
+        return
+    fi
+    
+    local total_lines=$(wc -l < PRD.md)
+    local next_section=$(tail -n +$((us_line_num + 1)) PRD.md | grep -n '^### \|^## ' | head -1 | cut -d: -f1)
+    
+    local end_line
+    if [[ -n "$next_section" ]]; then
+        end_line=$((us_line_num + next_section - 1))
+    else
+        end_line=$total_lines
+    fi
+    
+    sed -n "${us_line_num},${end_line}p" PRD.md
 }
 
 # === ПРОГРЕСС БАР (ASCII) ===
@@ -118,6 +124,21 @@ progress_bar() {
     printf "] %d/%d (%d%%)" "$done" "$total" "$pct"
 }
 
+# === ФУНКЦИЯ ОБНОВЛЕНИЯ ТАЙМЕРА ===
+# Сохраняем позицию строки с таймером
+TIMER_LINE=5
+
+update_timer() {
+    while true; do
+        # Перемещаем курсор на строку с таймером и обновляем
+        tput sc  # сохраняем позицию курсора
+        tput cup $TIMER_LINE 0  # перемещаемся на строку таймера
+        echo -ne "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD     "
+        tput rc  # восстанавливаем позицию курсора
+        sleep 1
+    done
+}
+
 # === ПРОВЕРКА ФАЙЛОВ ===
 if [[ ! -f "PRD.md" ]]; then
     echo "ERROR: PRD.md not found!"
@@ -136,10 +157,11 @@ fi
 
 # === TRAP ДЛЯ CTRL+C ===
 cleanup() {
-    # Убиваем фоновые процессы
-    jobs -p | xargs -r kill 2>/dev/null
+    [[ -n "$timer_pid" ]] && kill "$timer_pid" 2>/dev/null
+    [[ -n "$tail_pid" ]] && kill "$tail_pid" 2>/dev/null
+    [[ -n "$claude_pid" ]] && kill "$claude_pid" 2>/dev/null
     [[ -n "$output_file" ]] && rm -f "$output_file"
-    echo ""
+    tput cnorm 2>/dev/null  # показать курсор
     echo ""
     echo "------------------------------------------------------------"
     echo "Ralph Loop interrupted"
@@ -147,7 +169,7 @@ cleanup() {
     echo "------------------------------------------------------------"
     exit 130
 }
-trap cleanup INT TERM
+trap cleanup INT TERM EXIT
 
 # === ГЛАВНЫЙ ЦИКЛ ===
 while true; do
@@ -156,13 +178,13 @@ while true; do
     remaining=$(count_remaining)
     completed=$(count_completed)
     total=$((completed + remaining))
-    current_us=$(get_current_us)
-    current_criterion=$(get_current_criterion)
+    
+    # Останавливаем предыдущий таймер
+    [[ -n "$timer_pid" ]] && kill "$timer_pid" 2>/dev/null
+    timer_pid=""
     
     # Все задачи выполнены?
     if [[ "$remaining" -eq 0 ]] || [[ -z "$remaining" ]]; then
-        last_status="complete"
-        clear
         echo ""
         echo -e "${GREEN}============================================${NC}"
         echo -e "${GREEN}  ALL TASKS COMPLETE!${NC}"
@@ -175,7 +197,6 @@ while true; do
 
     # Лимит итераций?
     if [[ $MAX -ne 0 && $iteration -gt $MAX ]]; then
-        clear
         echo ""
         echo -e "${YELLOW}============================================${NC}"
         echo -e "${YELLOW}  Reached max iterations ($MAX)${NC}"
@@ -185,8 +206,10 @@ while true; do
         exit 1
     fi
 
-    # === ПОКАЗ HEADER ===
+    # === HEADER ===
     clear
+    tput civis  # скрыть курсор
+    
     echo "============================================================"
     echo "  RALPH LOOP - Iteration $iteration / $([ $MAX -eq 0 ] && echo 'unlimited' || echo $MAX)"
     echo "============================================================"
@@ -194,70 +217,76 @@ while true; do
     echo -n "  Progress: "
     progress_bar "$completed" "$total"
     echo ""
-    echo "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD"
+    # Строка 5 (TIMER_LINE) - здесь будет обновляться время
+    echo "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD     "
     echo ""
+    
+    # === ТЕКУЩАЯ ЗАДАЧА ИЗ PRD ===
     echo "------------------------------------------------------------"
-    echo "  CURRENT TASK"
+    echo "  CURRENT TASK FROM PRD.md"
     echo "------------------------------------------------------------"
-    echo -e "  User Story: ${CYAN}${current_us}${NC}"
-    echo -e "  Criterion:  ${BOLD}${current_criterion}${NC}"
     echo ""
+    get_current_task_block | head -20 | while IFS= read -r line; do
+        echo "  $line"
+    done
+    echo ""
+    
+    # === GIT COMMITS ===
     echo "------------------------------------------------------------"
     echo "  RECENT GIT COMMITS"
     echo "------------------------------------------------------------"
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        git log --oneline -3 2>/dev/null | while read -r line; do
-            echo "  $line"
-        done
-        [[ $(git log --oneline -1 2>/dev/null | wc -l) -eq 0 ]] && echo "  (no commits yet)"
+        commits=$(git log --oneline -3 2>/dev/null)
+        if [[ -n "$commits" ]]; then
+            echo "$commits" | while read -r line; do
+                echo "  $line"
+            done
+        else
+            echo "  (no commits yet)"
+        fi
     else
         echo "  (not a git repository)"
     fi
     echo ""
+    
+    # === CLAUDE OUTPUT ===
     echo "------------------------------------------------------------"
-    echo "  CLAUDE OUTPUT"
+    echo "  CLAUDE OUTPUT (live)"
     echo "------------------------------------------------------------"
 
-    # === ЗАПУСК CLAUDE С РЕАЛЬНЫМ СТРИМИНГОМ ===
+    # Запускаем обновление таймера в фоне
+    update_timer &
+    timer_pid=$!
+
+    # Создаем файл для вывода
     output_file=$(mktemp)
+    touch "$output_file"
     
-    # Запускаем Claude в фоне, пишем в файл
-    claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE" > "$output_file" 2>&1 &
-    claude_pid=$!
+    # Запускаем tail -f в фоне для стриминга
+    tail -f "$output_file" 2>/dev/null | while IFS= read -r line; do
+        echo "  ${line:0:76}"
+    done &
+    tail_pid=$!
     
-    # Даем Claude начать
-    sleep 0.5
-    
-    # Стримим вывод пока Claude работает
-    last_line_count=0
-    while kill -0 "$claude_pid" 2>/dev/null; do
-        if [[ -f "$output_file" ]]; then
-            current_line_count=$(wc -l < "$output_file" 2>/dev/null || echo 0)
-            if [[ "$current_line_count" -gt "$last_line_count" ]]; then
-                # Показываем новые строки
-                tail -n $((current_line_count - last_line_count)) "$output_file" 2>/dev/null | while IFS= read -r line; do
-                    echo "  ${line:0:74}"
-                done
-                last_line_count=$current_line_count
-            fi
-        fi
-        sleep 0.3
-    done
-    
-    # Ждем завершения и получаем код выхода
-    wait "$claude_pid"
+    # Запускаем Claude
+    claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE" >> "$output_file" 2>&1
     exit_code=$?
     
-    # Показываем оставшийся вывод
-    if [[ -f "$output_file" ]]; then
-        current_line_count=$(wc -l < "$output_file" 2>/dev/null || echo 0)
-        if [[ "$current_line_count" -gt "$last_line_count" ]]; then
-            tail -n $((current_line_count - last_line_count)) "$output_file" 2>/dev/null | while IFS= read -r line; do
-                echo "  ${line:0:74}"
-            done
-        fi
-    fi
+    # Даем tail показать последний вывод
+    sleep 0.5
     
+    # Останавливаем tail и таймер
+    kill "$tail_pid" 2>/dev/null
+    wait "$tail_pid" 2>/dev/null
+    tail_pid=""
+    
+    kill "$timer_pid" 2>/dev/null
+    wait "$timer_pid" 2>/dev/null
+    timer_pid=""
+    
+    tput cnorm  # показать курсор
+    
+    # Читаем результат
     result=$(cat "$output_file" 2>/dev/null)
     rm -f "$output_file"
     output_file=""
@@ -268,7 +297,6 @@ while true; do
     # Ошибка Claude?
     if [[ $exit_code -ne 0 ]] || [[ -z "$result" ]]; then
         echo -e "  ${YELLOW}[!] Claude error or empty response, retrying...${NC}"
-        last_status="retrying"
         sleep "$SLEEP"
         continue
     fi
@@ -286,27 +314,23 @@ while true; do
     # Проверка статуса
     if [[ "$result" == *"<r>SUCCESS</r>"* ]]; then
         echo -e "  ${GREEN}[OK] Task completed successfully${NC}"
-        last_status="success"
         consecutive_failures=0
     elif [[ "$result" == *"<r>FAILED</r>"* ]]; then
         ((consecutive_failures++))
         echo -e "  ${RED}[FAIL] Task failed (attempt $consecutive_failures/$STUCK_THRESHOLD)${NC}"
-        last_status="failed"
         
         if [[ $consecutive_failures -ge $STUCK_THRESHOLD ]]; then
             echo ""
             echo -e "${RED}============================================${NC}"
             echo -e "${RED}  STUCK: $STUCK_THRESHOLD consecutive failures${NC}"
             echo -e "${RED}============================================${NC}"
-            echo "Task: $current_us"
-            echo "Criterion: $current_criterion"
             echo ""
             echo "Check progress.txt for details"
             echo "Fix manually, then: ./ralph.sh $MAX $SLEEP $STUCK_THRESHOLD"
             exit 2
         fi
     else
-        echo -e "  ${YELLOW}[?] No status tag found in response${NC}"
+        echo -e "  ${YELLOW}[?] No status tag found${NC}"
     fi
 
     echo ""

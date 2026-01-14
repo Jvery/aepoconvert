@@ -738,12 +738,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to know if my file is too large.
 
 **Acceptance Criteria:**
-- [ ] Warn with toast if single file > 100MB
-- [ ] Show estimated conversion time for files > 50MB
-- [ ] Block files > 2GB with error toast
-- [ ] Display file size in human-readable format
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Warn with toast if single file > 100MB
+- [x] Show estimated conversion time for files > 50MB
+- [x] Block files > 2GB with error toast
+- [x] Display file size in human-readable format
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

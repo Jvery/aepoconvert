@@ -1007,3 +1007,25 @@
 - disabled:hover:scale-100 prevents awkward scaling on disabled elements
 
 ---
+
+### Iteration 52 - US-052: Create responsive design for mobile
+**Status:** ✅ SUCCESS
+**What was done:**
+- Updated DropZone with `min-h-[160px] sm:min-h-[200px]` for reduced height on mobile
+- Added smaller icon (h-12 w-12 vs h-16 w-16) and text (text-base vs text-lg) on mobile
+- Added responsive padding and gap (gap-3 sm:gap-4, py-6 sm:py-8)
+- Hidden file extensions hint on mobile with `hidden sm:block` to reduce clutter
+- FileList already had `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` for single column on mobile
+- SettingsPanel already full width (uses container with rounded corners)
+- Updated button sizes for touch: h-11 sm:h-9 (default), h-10 sm:h-8 (sm), h-12 sm:h-10 (lg)
+- Icon button sizes also updated: size-11 sm:size-9, size-10 sm:size-8, size-12 sm:size-10
+- Tested at 375px viewport width with Playwright screenshot
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Use `sm:` prefix for desktop overrides, mobile-first design is cleaner
+- 44px (h-11) is minimum touch target size per Apple HIG and Google Material guidelines
+- Hide non-essential text on mobile to reduce clutter while keeping functionality
+- Use responsive breakpoints consistently: < 640px (mobile), >= 640px (sm), >= 1024px (lg)
+
+---
