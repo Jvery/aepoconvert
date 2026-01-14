@@ -483,14 +483,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want a clear button to start conversion.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/actions/ConvertButton.tsx`
-- [ ] Large button with gradient background
-- [ ] Text: "Convert" with file count badge when files > 0
-- [ ] Disabled state when no files or isConverting is true
-- [ ] Loading spinner (lucide Loader2 icon) during conversion
-- [ ] Call startConversion() from store on click
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/actions/ConvertButton.tsx`
+- [x] Large button with gradient background
+- [x] Text: "Convert" with file count badge when files > 0
+- [x] Disabled state when no files or isConverting is true
+- [x] Loading spinner (lucide Loader2 icon) during conversion
+- [x] Call startConversion() from store on click
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

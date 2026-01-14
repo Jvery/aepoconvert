@@ -702,3 +702,18 @@
 - Showing current numeric values beside controls clarifies advanced settings state at a glance
 
 ---
+
+### Iteration 35 - US-035: Create ConvertButton component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added `src/components/actions/ConvertButton.tsx` with a large gradient primary action button
+- Shows file count badge when files are present and disables when no files or a conversion is already running
+- Displays a Loader2 spinner during conversion and triggers `startConversion()` on click
+- Includes optional className prop for flexible placement in future action rows
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- The `gradient-bg-animated` utility pairs well with the shadcn Button focus/spacing defaults to create a standout primary action
+- Centralizing enable/disable state from the store (files length, isConverting) keeps button behavior aligned with global conversion status
+
+---
