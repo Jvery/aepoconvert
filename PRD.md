@@ -498,15 +498,15 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to download converted files easily.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/actions/DownloadButton.tsx`
-- [ ] Props: files: ConvertibleFile[] (only completed ones)
-- [ ] Show only when at least one file has status 'complete'
-- [ ] Single file: direct download with correct filename
-- [ ] Multiple files: download as ZIP
-- [ ] Install `jszip` package
-- [ ] Animated checkmark icon
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/actions/DownloadButton.tsx`
+- [x] Props: files: ConvertibleFile[] (only completed ones)
+- [x] Show only when at least one file has status 'complete'
+- [x] Single file: direct download with correct filename
+- [x] Multiple files: download as ZIP
+- [x] Install `jszip` package
+- [x] Animated checkmark icon
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

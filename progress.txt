@@ -717,3 +717,18 @@
 - Centralizing enable/disable state from the store (files length, isConverting) keeps button behavior aligned with global conversion status
 
 ---
+
+### Iteration 36 - US-036: Create DownloadButton component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `jszip` and added `src/components/actions/DownloadButton.tsx` that renders only when completed files exist
+- Single-file downloads use the original filename with the new extension; multi-file downloads are packed into `aepoconvert-files.zip` with unique names
+- Added animated checkmark badge, ZIP/download sublabel, and disabled loading state while generating archives
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- JSZip accepts Blob objects directly, making it straightforward to stream converted results into an archive
+- Building filenames with a Set prevents duplicate names when batching downloads
+- Releasing object URLs shortly after triggering the anchor click avoids memory leaks in repeated downloads
+
+---
