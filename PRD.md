@@ -710,13 +710,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want smooth micro-animations for polish.
 
 **Acceptance Criteria:**
-- [ ] Button hover: scale(1.02) transition
-- [ ] Card hover: subtle shadow increase
-- [ ] Progress bar: shimmer effect animation
-- [ ] Badge: pop animation on format change
-- [ ] Use Tailwind transitions and framer-motion
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Button hover: scale(1.02) transition
+- [x] Card hover: subtle shadow increase
+- [x] Progress bar: shimmer effect animation
+- [x] Badge: pop animation on format change
+- [x] Use Tailwind transitions and framer-motion
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

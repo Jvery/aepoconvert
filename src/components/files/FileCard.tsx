@@ -1,6 +1,7 @@
 'use client';
 
 import { X, FileImage, FileAudio, FileText, File, RotateCcw, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -186,9 +187,20 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats, onR
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
               Convert to
             </p>
-            <p className="text-sm text-muted-foreground">
-              {availableFormats.length ? 'Choose your output format' : 'No compatible outputs'}
-            </p>
+            {/* Animated output format badge with pop effect on change */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentOutput}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+              >
+                <Badge variant="outline" className="text-xs">
+                  {currentOutput?.toUpperCase() || 'Select format'}
+                </Badge>
+              </motion.div>
+            </AnimatePresence>
           </div>
           <FormatSelector
             currentFormat={currentOutput}
