@@ -32,6 +32,21 @@
 
 ---
 
+### Iteration 34 - US-034: Create SettingsPanel combining simple and advanced
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/settings/SettingsPanel.tsx` with a collapsible container and expand/collapse button (hidden by default)
+- Added shadcn Tabs for switching between Simple and Advanced quality controls, rendering existing SimpleQualitySettings and AdvancedQualitySettings components
+- Synced tab selection with the conversion store mode for consistent state
+- Integrated the SettingsPanel into `src/app/[locale]/page.tsx` in place of the previous side-by-side demo
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Use `overflow-hidden` with animated max-height transitions to fully hide collapsible content
+- Syncing tab changes to shared state avoids mode mismatches when switching between preset and advanced controls
+
+---
+
 ### Iteration 2 - US-002: Install and configure shadcn/ui
 **Status:** ✅ SUCCESS
 **What was done:**

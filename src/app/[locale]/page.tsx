@@ -2,6 +2,7 @@
 
 import { DropZone } from "@/components/upload/DropZone";
 import { FileList } from "@/components/files/FileList";
+import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { useConversionStore } from "@/store/conversion-store";
 
 export default function Home() {
@@ -15,6 +16,9 @@ export default function Home() {
 
         {/* File List */}
         <FileList />
+
+        {/* Quality Settings */}
+        <SettingsPanel />
       </div>
     </div>
   );

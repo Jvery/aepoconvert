@@ -469,13 +469,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to toggle between simple and advanced settings.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/settings/SettingsPanel.tsx`
-- [ ] Use shadcn Tabs with two tabs: "Simple" and "Advanced"
-- [ ] Render SimpleQualitySettings in Simple tab
-- [ ] Render AdvancedQualitySettings in Advanced tab
-- [ ] Collapsible panel (hidden by default, expand button)
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/settings/SettingsPanel.tsx`
+- [x] Use shadcn Tabs with two tabs: "Simple" and "Advanced"
+- [x] Render SimpleQualitySettings in Simple tab
+- [x] Render AdvancedQualitySettings in Advanced tab
+- [x] Collapsible panel (hidden by default, expand button)
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
