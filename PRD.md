@@ -582,13 +582,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need DownloadButton to save converted files.
 
 **Acceptance Criteria:**
-- [ ] Single file: create object URL from blob, trigger download with anchor click
-- [ ] Filename: original name with new extension
-- [ ] Multiple files: use JSZip to create archive
-- [ ] ZIP filename: "aepoconvert-files.zip"
-- [ ] Revoke object URLs after download
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Single file: create object URL from blob, trigger download with anchor click
+- [x] Filename: original name with new extension
+- [x] Multiple files: use JSZip to create archive
+- [x] ZIP filename: "aepoconvert-files.zip"
+- [x] Revoke object URLs after download
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

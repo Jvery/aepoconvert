@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useConversionStore } from '@/store/conversion-store';
@@ -15,11 +16,13 @@ interface ConvertButtonProps {
  * Displays file count, disables when nothing to convert, and shows a spinner while converting.
  */
 export function ConvertButton({ className }: ConvertButtonProps) {
-  const { files, isConverting, startConversion } = useConversionStore((state) => ({
-    files: state.files,
-    isConverting: state.isConverting,
-    startConversion: state.startConversion,
-  }));
+  const { files, isConverting, startConversion } = useConversionStore(
+    useShallow((state) => ({
+      files: state.files,
+      isConverting: state.isConverting,
+      startConversion: state.startConversion,
+    }))
+  );
 
   const fileCount = files.length;
   const isDisabled = fileCount === 0 || isConverting;

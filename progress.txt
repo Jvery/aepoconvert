@@ -19,6 +19,7 @@
 - @ffmpeg/ffmpeg: readFile() returns Uint8Array with SharedArrayBuffer; use `new Uint8Array(data).buffer` for clean ArrayBuffer for Blob
 - @ffmpeg/ffmpeg: ALAC encoding requires `-f ipod` container format flag in addition to `-c:a alac` codec
 - pandoc-wasm: npm package bundles WASM binary; use Pandoc class with init() and run() methods; no manual download needed
+- Zustand: Selectors returning objects cause infinite re-renders; use `useShallow` from 'zustand/react/shallow' for object selectors
 
 ## Iterations
 
@@ -799,5 +800,23 @@
 - Taking a settings snapshot per run prevents mid-conversion UI tweaks from desynchronizing worker parameters
 - Promise.allSettled ensures the converting flag clears even when some files fail
 - Progress callbacks should ignore removed/non-converting files to avoid stale state writes
+
+---
+
+### Iteration 42 - US-042: Wire up download functionality
+**Status:** ✅ SUCCESS
+**What was done:**
+- Verified DownloadButton already implemented triggerDownload() with object URL creation and anchor click download
+- Verified buildFilename() uses original name with new extension from file.to
+- Verified downloadZip() uses JSZip to create archive named "aepoconvert-files.zip"
+- Verified object URLs are revoked after 2 seconds via setTimeout
+- Fixed infinite loop bug in ConvertButton and ClearAllButton caused by Zustand selector returning new object on each render
+- Added `useShallow` from 'zustand/react/shallow' to prevent unnecessary re-renders
+- Typecheck passes and app works correctly in browser
+
+**Learnings:**
+- Zustand selectors that return objects `(state) => ({ a: state.a, b: state.b })` cause infinite re-renders because a new object is created each time
+- Use `useShallow` wrapper from 'zustand/react/shallow' for object selectors to enable shallow comparison
+- Alternative: select individual values with separate useConversionStore calls for each value
 
 ---

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,10 +27,12 @@ interface ClearAllButtonProps {
  * Hidden entirely when there are no files loaded.
  */
 export function ClearAllButton({ className }: ClearAllButtonProps) {
-  const { files, clearAll } = useConversionStore((state) => ({
-    files: state.files,
-    clearAll: state.clearAll,
-  }));
+  const { files, clearAll } = useConversionStore(
+    useShallow((state) => ({
+      files: state.files,
+      clearAll: state.clearAll,
+    }))
+  );
   const [open, setOpen] = useState(false);
 
   if (files.length === 0) return null;
