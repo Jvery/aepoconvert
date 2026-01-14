@@ -9,10 +9,7 @@ import { DropZone } from "@/components/upload/DropZone";
 import { useConversionStore } from "@/store/conversion-store";
 
 export default function Home() {
-  const { addFiles, files } = useConversionStore((state) => ({
-    addFiles: state.addFiles,
-    files: state.files,
-  }));
+  const files = useConversionStore((state) => state.files);
 
   return (
     <div className="relative isolate overflow-hidden">
@@ -22,7 +19,7 @@ export default function Home() {
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Drop Zone */}
           <section className="rounded-2xl border border-foreground/5 bg-card/70 p-3 shadow-[0_20px_60px_-45px_rgba(59,130,246,0.35)] backdrop-blur">
-            <DropZone onFilesSelected={addFiles} className="bg-transparent" />
+            <DropZone className="bg-transparent" />
           </section>
 
           {/* File List */}

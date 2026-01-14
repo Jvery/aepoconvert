@@ -542,12 +542,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need DropZone to add files to the store.
 
 **Acceptance Criteria:**
-- [ ] DropZone calls addFiles() action on file drop
-- [ ] DropZone calls addFiles() action on file input change
-- [ ] Files appear in FileList immediately after adding
-- [ ] Format auto-detected using detectFormat()
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] DropZone calls addFiles() action on file drop
+- [x] DropZone calls addFiles() action on file input change
+- [x] Files appear in FileList immediately after adding
+- [x] Format auto-detected using detectFormat()
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

@@ -4,10 +4,9 @@ import { useRef, useCallback, useState } from 'react';
 import { Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { detectFormat, ALL_FORMATS } from '@/lib/formats';
+import { useConversionStore } from '@/store/conversion-store';
 
 export interface DropZoneProps {
-  /** Callback when files are dropped or selected */
-  onFilesSelected?: (files: File[]) => void;
   /** Whether the drop zone is disabled */
   disabled?: boolean;
   /** Custom class name */
@@ -44,10 +43,11 @@ function getAcceptAttribute(): string {
  * Visual feedback on drag-over with color and scale animation
  * Filters files by supported formats and shows toast for unsupported files
  */
-export function DropZone({ onFilesSelected, disabled = false, className = '' }: DropZoneProps) {
+export function DropZone({ disabled = false, className = '' }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const dragCounter = useRef(0);
+  const addFiles = useConversionStore((state) => state.addFiles);
 
   const handleFiles = useCallback(
     (files: FileList | null) => {
@@ -81,12 +81,12 @@ export function DropZone({ onFilesSelected, disabled = false, className = '' }: 
         });
       }
 
-      // Only call callback with supported files
+      // Only add supported files to the store
       if (supportedFiles.length > 0) {
-        onFilesSelected?.(supportedFiles);
+        addFiles(supportedFiles);
       }
     },
-    [onFilesSelected, disabled]
+    [addFiles, disabled]
   );
 
   const handleDrop = useCallback(

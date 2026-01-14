@@ -760,3 +760,16 @@
 - Combining gap utilities (gap-4 with sm:gap-6) cleanly satisfies mobile vs desktop spacing requirements in one stack
 
 ---
+
+### Iteration 39 - US-039: Wire up file upload to store
+**Status:** ✅ SUCCESS
+**What was done:**
+- DropZone now dispatches the conversion store’s `addFiles()` action directly for both drag-and-drop and file input selection, removing the need for parent wiring
+- The conversion store now auto-detects each file’s format via `detectFormat()` and stores a canonical extension for the `from` field before queuing files
+- Confirmed files appear immediately in FileList and typecheck passes with `npm run build`
+
+**Learnings:**
+- Using `detectFormat()` to choose between the canonical extension and the original filename extension keeps format metadata consistent across future format lookups
+- Having DropZone call the store directly avoids missed callbacks and guarantees uploads surface in the UI as soon as they’re added
+
+---

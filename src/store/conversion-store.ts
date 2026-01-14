@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { detectFormat } from '@/lib/formats';
 import type { ConvertibleFile, QualitySettings } from '@/types';
 
 /**
@@ -72,18 +73,28 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
     // Actions
     addFiles: (files: File[]) => {
       set((state) => {
-        const newFiles: ConvertibleFile[] = files.map((file) => ({
-          id: generateId(),
-          file,
-          name: file.name,
-          size: file.size,
-          from: getFileExtension(file.name),
-          to: null,
-          status: 'pending',
-          progress: 0,
-          error: null,
-          result: null,
-        }));
+        const newFiles: ConvertibleFile[] = files.map((file) => {
+          const detectedFormat = detectFormat(file);
+          const extension = getFileExtension(file.name);
+          const normalizedFrom = detectedFormat
+            ? (detectedFormat.extensions.includes(extension)
+              ? extension
+              : detectedFormat.extensions[0])
+            : extension;
+
+          return {
+            id: generateId(),
+            file,
+            name: file.name,
+            size: file.size,
+            from: normalizedFrom,
+            to: null,
+            status: 'pending',
+            progress: 0,
+            error: null,
+            result: null,
+          };
+        });
         state.files.push(...newFiles);
       });
     },
