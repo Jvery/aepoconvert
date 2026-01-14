@@ -8,11 +8,17 @@ import { SimpleQualitySettings } from "@/components/settings/SimpleQualitySettin
 import { useConversionStore } from "@/store/conversion-store";
 import { cn } from "@/lib/utils";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import type { FormatCategory } from "@/types";
+
+interface SettingsPanelProps {
+  activeCategories: Set<FormatCategory>;
+}
 
 /**
  * Collapsible settings panel that lets users switch between simple and advanced quality controls
+ * Only shows settings relevant to the file types currently added
  */
-export function SettingsPanel() {
+export function SettingsPanel({ activeCategories }: SettingsPanelProps) {
   const { globalSettings, setGlobalSettings } = useConversionStore();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"simple" | "advanced">(
@@ -79,10 +85,10 @@ export function SettingsPanel() {
               <TabsTrigger value="advanced">Advanced</TabsTrigger>
             </TabsList>
             <TabsContent value="simple">
-              <SimpleQualitySettings />
+              <SimpleQualitySettings activeCategories={activeCategories} />
             </TabsContent>
             <TabsContent value="advanced">
-              <AdvancedQualitySettings />
+              <AdvancedQualitySettings activeCategories={activeCategories} />
             </TabsContent>
           </Tabs>
         </div>
