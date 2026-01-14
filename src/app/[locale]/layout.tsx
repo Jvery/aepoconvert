@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
+import { DragOverlay } from '@/components/layout/DragOverlay';
 import { Toaster } from '@/components/ui/sonner';
 import "../globals.css";
 
@@ -48,6 +49,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <main className="min-h-[calc(100vh-3.5rem)]">
             {children}
           </main>
+          <DragOverlay />
           <Toaster />
         </NextIntlClientProvider>
       </body>

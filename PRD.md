@@ -610,15 +610,15 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want visual feedback when dragging files anywhere on page.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/layout/DragOverlay.tsx`
-- [ ] Fixed full-screen overlay (z-50)
-- [ ] Show when files dragged over window (not just DropZone)
-- [ ] Animated gradient background with opacity
-- [ ] "Drop files to convert" centered text
-- [ ] Hide on drag-leave or drop
-- [ ] Add to layout.tsx
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/layout/DragOverlay.tsx`
+- [x] Fixed full-screen overlay (z-50)
+- [x] Show when files dragged over window (not just DropZone)
+- [x] Animated gradient background with opacity
+- [x] "Drop files to convert" centered text
+- [x] Hide on drag-leave or drop
+- [x] Add to layout.tsx
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
