@@ -630,3 +630,60 @@
 - Early wiring of DropZone to store (via page.tsx) helps verify FileList functionality
 
 ---
+
+### Iteration 31 - US-031: Add animations to FileList
+**Status:** ✅ SUCCESS
+**What was done:**
+- Installed `framer-motion` package
+- Imported motion and AnimatePresence from framer-motion
+- Wrapped FileCard in motion.div with layout animation enabled
+- Added enter animation: fade in (opacity 0→1) + slide up (y 20→0)
+- Added exit animation: fade out (opacity 1→0) + slide up (y 0→-20)
+- Used AnimatePresence with mode="popLayout" for proper exit animations
+- Added fade-in animation to empty state for smoother transitions
+- Verified typecheck passes with `npm run build`
+- Verified animations work in browser: file entry, file removal, and empty state transitions all animated
+
+**Learnings:**
+- framer-motion's AnimatePresence requires mode="popLayout" or mode="wait" for exit animations in grid layouts
+- motion.div with layout prop enables smooth grid rearrangement when items are added/removed
+- Use easeOut timing function for natural-feeling animations (0.3s duration)
+- Empty state can also benefit from a simple fade-in animation for polish
+
+---
+
+### Iteration 32 - US-032: Create SimpleQualitySettings component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/settings/SimpleQualitySettings.tsx` component
+- Defined QUALITY_PRESETS constant with three options: Low (60%), Medium (80%), High (95%)
+- Each preset has a label, value, and description
+- Three Button components in a row using flex layout with gap-2
+- Visual selection indicator: default variant (filled) when selected, outline variant when not
+- Added ring-2 ring-primary/20 for extra visual feedback on selected button
+- aria-pressed attribute for accessibility
+- Updates global settings in store via setGlobalSettings({ quality, mode: 'simple' })
+- Description updates dynamically based on selected preset
+- Verified typecheck passes with `npm run build`
+- Verified all three buttons work correctly in browser with selection state and description updates
+
+**Learnings:**
+- Use `variant={isSelected ? "default" : "outline"}` pattern for toggle button groups
+- aria-pressed attribute communicates selection state to screen readers
+- Show description for currently selected option rather than all at once for cleaner UI
+- Use flex-1 on buttons to make them equal width in the row
+
+---
+
+### Iteration 33 - US-033: Create AdvancedQualitySettings component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Enhanced `AdvancedQualitySettings` with current value labels for quality, bitrate, and sample rate
+- Added accessibility labels for the selects and kept store updates in advanced mode on every change
+- Verified typecheck passes via `npm run build` (network access needed for next/font Google Fonts fetch)
+
+**Learnings:**
+- next/font build requires network access to download Google Fonts; rerun build with network permissions when restricted
+- Showing current numeric values beside controls clarifies advanced settings state at a glance
+
+---

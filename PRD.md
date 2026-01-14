@@ -454,14 +454,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want fine-grained quality control.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/settings/AdvancedQualitySettings.tsx`
-- [ ] Slider for quality (1-100) using shadcn Slider
-- [ ] Select dropdown for audio bitrate: 64, 128, 192, 256, 320 kbps
-- [ ] Select dropdown for sample rate: 22050, 44100, 48000 Hz
-- [ ] Labels showing current values
-- [ ] Update store on change
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/settings/AdvancedQualitySettings.tsx`
+- [x] Slider for quality (1-100) using shadcn Slider
+- [x] Select dropdown for audio bitrate: 64, 128, 192, 256, 320 kbps
+- [x] Select dropdown for sample rate: 22050, 44100, 48000 Hz
+- [x] Labels showing current values
+- [x] Update store on change
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
