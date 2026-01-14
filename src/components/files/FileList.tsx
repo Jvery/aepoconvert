@@ -16,6 +16,7 @@ export function FileList() {
   const files = useConversionStore((state) => state.files);
   const removeFile = useConversionStore((state) => state.removeFile);
   const setOutputFormat = useConversionStore((state) => state.setOutputFormat);
+  const retryFile = useConversionStore((state) => state.retryFile);
 
   // Empty state when no files
   if (files.length === 0) {
@@ -65,6 +66,7 @@ export function FileList() {
                 onRemove={() => removeFile(file.id)}
                 onFormatChange={(format) => setOutputFormat(file.id, format)}
                 availableFormats={availableFormats}
+                onRetry={() => retryFile(file.id)}
               />
             </motion.div>
           );

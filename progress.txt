@@ -820,3 +820,66 @@
 - Alternative: select individual values with separate useConversionStore calls for each value
 
 ---
+
+### Iteration 43 - US-043: Add toast notifications for actions
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added toast.success() in DropZone.tsx when files are added, showing file count and names
+- Added toast.loading() in conversion-store.ts when conversion starts with "Converting X file(s)..."
+- Added toast.success() for successful conversions with "Conversion complete!" and count
+- Added toast.warning() for mixed results showing success and error counts
+- Added toast.error() for failed conversions with error message
+- Used sonner's toast ID feature to update the loading toast to success/error on completion
+- Verified typecheck passes with `npm run build`
+- Verified all toasts work correctly in browser with Playwright
+
+**Learnings:**
+- Use toast ID (`id: 'conversion-progress'`) to update the same toast from loading to success/error
+- toast.loading() creates a persistent loading indicator until dismissed or updated
+- Using `get()` in Zustand allows reading current state after async operations complete
+
+---
+
+### Iteration 44 - US-044: Add drag-over overlay to whole page
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/layout/DragOverlay.tsx` with full-screen overlay (z-50)
+- Shows when files dragged over window using window-level drag event listeners
+- Uses dragCounter ref pattern to handle nested drag events correctly
+- Animated gradient background (gradient-bg-animated) with 30% opacity and backdrop blur
+- Upload icon with pulse animation in primary-colored circle
+- "Drop files to convert" gradient text heading with subtitle
+- Dashed border visual indicator around the overlay
+- Handles file drops with format validation and toast notifications
+- Hides on drag-leave (counter reaches 0) or drop (counter reset to 0)
+- Added DragOverlay to layout.tsx
+- Verified typecheck passes with `npm run build`
+- Verified overlay shows/hides correctly in browser with Playwright
+
+**Learnings:**
+- Window-level drag events allow detecting drags anywhere on the page, not just specific dropzones
+- The dragCounter ref pattern prevents flicker from nested element drag events
+- Check `e.dataTransfer?.types.includes('Files')` to only respond to file drags (not text drags)
+
+---
+
+### Iteration 45 - US-045: Add loading states for converter initialization
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/status/ConverterStatus.tsx` with loading/ready/error states
+- Each converter (image, audio, document) initializes independently to track individual failures
+- Shows Loader2 spinner during loading, checkmark icon when ready, AlertCircle for errors
+- Icons use category-specific icons (ImageIcon, Music, FileText from lucide-react)
+- Color-coded states: green for ready, red/destructive for error, muted for loading
+- Tooltip on hover shows detailed status with labels and error messages
+- Fixed position in bottom-right corner (z-40) with glassmorphism styling
+- Added ConverterStatus to layout.tsx
+- Verified typecheck passes with `npm run build`
+- Verified all states work in browser with Playwright
+
+**Learnings:**
+- Initialize converters independently rather than using initializeAllConverters to track individual failures
+- Dynamic imports with .then()/.catch() allow parallel initialization with error handling per converter
+- FFmpeg requires SharedArrayBuffer which needs COOP/COEP headers (not available in dev without config)
+
+---

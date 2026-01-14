@@ -1,12 +1,13 @@
 'use client';
 
-import { X, FileImage, FileAudio, FileText, File } from 'lucide-react';
+import { X, FileImage, FileAudio, FileText, File, RotateCcw, AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { ConvertibleFile, FormatInfo } from '@/types';
 import { detectFormat } from '@/lib/formats';
 import { FormatSelector } from './FormatSelector';
+import { cn } from '@/lib/utils';
 
 export interface FileCardProps {
   /** The file data to display */
@@ -17,6 +18,8 @@ export interface FileCardProps {
   onFormatChange: (format: string) => void;
   /** Available output formats */
   availableFormats: FormatInfo[];
+  /** Callback when retry button is clicked */
+  onRetry?: () => void;
 }
 
 /**
@@ -85,7 +88,7 @@ function truncateFileName(name: string, maxLength: number = 30): string {
  * FileCard component displays a single uploaded file with its details
  * Shows file type icon, name, size, detected format badge, and remove button
  */
-export function FileCard({ file, onRemove, onFormatChange, availableFormats }: FileCardProps) {
+export function FileCard({ file, onRemove, onFormatChange, availableFormats, onRetry }: FileCardProps) {
   // Detect format info for category-based icon
   const formatInfo = detectFormat(file.file);
   const category = formatInfo?.category || 'document';
@@ -97,9 +100,13 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats }: F
     : 'outline';
 
   const currentOutput = file.to ?? availableFormats[0]?.extensions[0] ?? null;
+  const isError = file.status === 'error';
 
   return (
-    <Card className="relative p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <Card className={cn(
+      "relative p-4 shadow-sm hover:shadow-md transition-all duration-200",
+      isError && "border-destructive border-2 bg-destructive/5"
+    )}>
       {/* Remove button in top-right corner */}
       <Button
         variant="ghost"
@@ -132,6 +139,16 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats }: F
             {formatFileSize(file.size)}
           </p>
 
+          {/* Error message displayed below file name */}
+          {isError && file.error && (
+            <div className="mt-2 flex items-start gap-1.5">
+              <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+              <p className="text-sm text-destructive line-clamp-2">
+                {file.error}
+              </p>
+            </div>
+          )}
+
           {/* Format badge */}
           <div className="mt-2">
             <Badge variant={badgeVariant}>
@@ -141,21 +158,45 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats }: F
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
-        <div className="space-y-0.5">
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-            Convert to
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {availableFormats.length ? 'Choose your output format' : 'No compatible outputs'}
-          </p>
+      {/* Error state with retry button */}
+      {isError && onRetry ? (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2">
+          <div className="space-y-0.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-destructive">
+              Conversion failed
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Click retry to try again
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRetry}
+            className="shrink-0 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            aria-label={`Retry conversion for ${file.name}`}
+          >
+            <RotateCcw className="h-4 w-4 mr-1.5" />
+            Retry
+          </Button>
         </div>
-        <FormatSelector
-          currentFormat={currentOutput}
-          availableFormats={availableFormats}
-          onSelect={onFormatChange}
-        />
-      </div>
+      ) : (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
+          <div className="space-y-0.5">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              Convert to
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {availableFormats.length ? 'Choose your output format' : 'No compatible outputs'}
+            </p>
+          </div>
+          <FormatSelector
+            currentFormat={currentOutput}
+            availableFormats={availableFormats}
+            onSelect={onFormatChange}
+          />
+        </div>
+      )}
     </Card>
   );
 }

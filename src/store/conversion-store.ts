@@ -40,6 +40,8 @@ interface ConversionActions {
   setGlobalSettings: (settings: Partial<QualitySettings>) => void;
   /** Start the conversion process */
   startConversion: () => Promise<void>;
+  /** Retry a failed conversion by resetting status to pending and clearing error */
+  retryFile: (id: string) => void;
   /** Clear all files from the queue */
   clearAll: () => void;
 }
@@ -278,6 +280,18 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
           description: firstError || `${errorCount} file${errorCount === 1 ? '' : 's'} failed to convert`,
         });
       }
+    },
+
+    retryFile: (id: string) => {
+      set((state) => {
+        const file = state.files.find((f) => f.id === id);
+        if (file && file.status === 'error') {
+          file.status = 'pending';
+          file.progress = 0;
+          file.error = null;
+          file.result = null;
+        }
+      });
     },
 
     clearAll: () => {

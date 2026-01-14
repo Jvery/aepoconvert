@@ -640,12 +640,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want clear error messages when conversion fails.
 
 **Acceptance Criteria:**
-- [ ] FileCard shows red border when status is 'error'
-- [ ] Error message displayed below file name
-- [ ] Retry button appears on error state
-- [ ] Retry resets status to 'pending' and clears error
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] FileCard shows red border when status is 'error'
+- [x] Error message displayed below file name
+- [x] Retry button appears on error state
+- [x] Retry resets status to 'pending' and clears error
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
