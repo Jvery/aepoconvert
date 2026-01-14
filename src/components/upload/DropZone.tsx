@@ -305,7 +305,7 @@ export function DropZone({ disabled = false, className = '' }: DropZoneProps) {
         <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
           Supports images, audio, and documents
         </p>
-        <p className="mt-2 text-xs text-muted-foreground/70 hidden sm:block">
+        <p className="mt-2 text-xs text-muted-foreground hidden sm:block">
           {getAcceptedExtensions()}
         </p>
       </div>

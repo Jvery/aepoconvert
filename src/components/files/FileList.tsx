@@ -33,7 +33,7 @@ export function FileList() {
         <p className="text-lg font-medium text-muted-foreground">
           No files added yet
         </p>
-        <p className="text-sm text-muted-foreground/70 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Drag and drop files above or click to browse
         </p>
       </motion.div>

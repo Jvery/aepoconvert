@@ -504,9 +504,9 @@ while true; do
     # Display header
     show_header
 
-    # Run Claude Code with visible output
-    # Using --dangerously-skip-permissions for non-interactive mode
-    if claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE"; then
+    # Run Claude Code with interactive TUI
+    # Using heredoc to pipe prompt while preserving interactive display
+    if claude --dangerously-skip-permissions <<< "$PROMPT_TEMPLATE"; then
         claude_exit_code=0
     else
         claude_exit_code=$?

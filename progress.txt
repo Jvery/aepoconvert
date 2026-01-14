@@ -1168,3 +1168,21 @@
 - Good practice to include aria-label during initial component development, not as an afterthought
 
 ---
+
+### Iteration 61 - US-060 (Criterion 2): Focus states visible on all interactive elements
+**Status:** ✅ SUCCESS
+**What was done:**
+- Updated `--ring` CSS variable in globals.css to use a more vibrant purple color (oklch 0.55 0.15 270 for light, 0.7 0.2 270 for dark)
+- Added global focus styles in @layer base for `a:focus-visible` and `[tabindex]:not([tabindex="-1"]):focus-visible`
+- Updated PrivacyBadge.tsx: changed div to button element with proper focus-visible styles (green ring to match badge color)
+- Updated Footer.tsx GitHub link: added explicit focus-visible ring styles with padding for better visual
+- Verified all interactive elements can be tabbed through: theme toggle → privacy badge → dropzone → settings button → quality buttons → GitHub link
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- The default `--ring` color in shadcn/ui is very muted (low chroma); increasing chroma makes focus states more visible
+- Changing tooltip trigger from div to button makes it keyboard-accessible automatically
+- Global focus styles in @layer base provide fallback for any elements missing explicit focus styling
+- Test focus navigation by pressing Tab repeatedly through the UI
+
+---

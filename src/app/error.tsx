@@ -59,7 +59,7 @@ export default function Error({
 
         {/* Error digest for debugging */}
         {error.digest && (
-          <p className="mt-6 text-xs text-muted-foreground/60">
+          <p className="mt-6 text-xs text-muted-foreground">
             Error ID: {error.digest}
           </p>
         )}
