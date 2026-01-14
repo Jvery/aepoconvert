@@ -732,3 +732,17 @@
 - Releasing object URLs shortly after triggering the anchor click avoids memory leaks in repeated downloads
 
 ---
+
+### Iteration 37 - US-037: Create ClearAllButton component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added `src/components/actions/ClearAllButton.tsx` with a ghost/outline aesthetic, dashed border, and accent hover glow
+- Implemented a confirmation dialog (shadcn Dialog) with destructive/cancel actions before clearing all files
+- Wired the confirm action to the store’s `clearAll()` and hide the button when no files are present
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Wrapping the trigger Button with Dialog provides a clean confirmation flow without extra state plumbing
+- Light dashed outlines plus subtle glow give destructive actions emphasis while keeping them secondary to primary CTAs
+
+---

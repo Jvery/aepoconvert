@@ -514,13 +514,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to clear all files and start fresh.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/actions/ClearAllButton.tsx`
-- [ ] Ghost/outline button style
-- [ ] Show confirmation dialog using shadcn Dialog
-- [ ] Call clearAll() from store on confirm
-- [ ] Hidden when no files
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/actions/ClearAllButton.tsx`
+- [x] Ghost/outline button style
+- [x] Show confirmation dialog using shadcn Dialog
+- [x] Call clearAll() from store on confirm
+- [x] Hidden when no files
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
