@@ -43,8 +43,12 @@ export const metadata: Metadata = {
     description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser.",
     creator: "@aepoconvert",
   },
+  manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
+    apple: [
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
   },
   robots: {
     index: true,

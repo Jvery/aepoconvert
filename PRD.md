@@ -822,14 +822,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to install the app as PWA.
 
 **Acceptance Criteria:**
-- [ ] Create `public/manifest.json`
-- [ ] name: "aepoconvert"
-- [ ] short_name: "aepoconvert"
-- [ ] Icons: 192x192 and 512x512 PNG
-- [ ] theme_color and background_color matching app
-- [ ] display: "standalone"
-- [ ] Add manifest link to layout.tsx metadata
-- [ ] Typecheck passes
+- [x] Create `public/manifest.json`
+- [x] name: "aepoconvert"
+- [x] short_name: "aepoconvert"
+- [x] Icons: 192x192 and 512x512 PNG
+- [x] theme_color and background_color matching app
+- [x] display: "standalone"
+- [x] Add manifest link to layout.tsx metadata
+- [x] Typecheck passes
 
 ---
 

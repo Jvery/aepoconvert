@@ -1130,3 +1130,22 @@
 - Error component receives { error, reset } props from Next.js error boundary
 
 ---
+
+### Iteration 59 - US-059: Add PWA manifest
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `public/manifest.json` with PWA configuration
+- Set name: "aepoconvert" and short_name: "aepoconvert"
+- Created 192x192 and 512x512 PNG icons in `public/icons/` directory
+- Set theme_color: "#8b5cf6" (purple matching app theme) and background_color: "#09090b" (zinc dark)
+- Set display: "standalone" for native-like experience
+- Added manifest link to layout.tsx metadata export
+- Added apple-touch-icon reference for iOS support
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Next.js Metadata API supports `manifest` field for PWA manifest linking
+- Icons with "purpose": "any maskable" work for both regular and adaptive icon contexts
+- PNG icons can be programmatically generated with Node.js zlib for simple solid-color placeholders
+
+---
