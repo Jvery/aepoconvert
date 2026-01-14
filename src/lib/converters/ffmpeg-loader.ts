@@ -6,12 +6,12 @@
  */
 
 import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { toBlobURL } from '@ffmpeg/util';
 
 /**
- * Base URL for FFmpeg WASM core files on jsDelivr CDN
+ * Base URL for FFmpeg WASM core files on unpkg CDN
+ * Using umd version for better compatibility
  */
-const FFMPEG_BASE_URL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
+const FFMPEG_BASE_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
 
 /**
  * Singleton FFmpeg instance
@@ -131,29 +131,15 @@ export async function initializeFFmpeg(): Promise<FFmpeg> {
       // Create new FFmpeg instance
       ffmpegInstance = new FFmpeg();
 
-      // Load FFmpeg core from CDN using blob URLs
-      // This avoids CORS issues and ensures proper MIME types
-      const coreURL = await toBlobURL(
-        `${FFMPEG_BASE_URL}/ffmpeg-core.js`,
-        'text/javascript'
-      );
-      const wasmURL = await toBlobURL(
-        `${FFMPEG_BASE_URL}/ffmpeg-core.wasm`,
-        'application/wasm'
-      );
+      // Load FFmpeg core from CDN using direct URLs
+      const coreURL = `${FFMPEG_BASE_URL}/ffmpeg-core.js`;
+      const wasmURL = `${FFMPEG_BASE_URL}/ffmpeg-core.wasm`;
 
       // Optional: Load the worker file for multi-threaded support
       // Only available when SharedArrayBuffer is supported
       let workerURL: string | undefined;
       if (hasSharedArrayBuffer && isCrossOriginIsolated) {
-        try {
-          workerURL = await toBlobURL(
-            `${FFMPEG_BASE_URL}/ffmpeg-core.worker.js`,
-            'text/javascript'
-          );
-        } catch (workerError) {
-          console.warn('[FFmpeg Loader] Failed to load worker, falling back to single-threaded mode:', workerError);
-        }
+        workerURL = `${FFMPEG_BASE_URL}/ffmpeg-core.worker.js`;
       }
 
       // Load FFmpeg with the core files
