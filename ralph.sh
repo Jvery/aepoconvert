@@ -1,12 +1,12 @@
 #!/bin/bash
-# Ralph Loop - ASCII TUI
-# Claude output показывается напрямую в терминал
+# Ralph Loop - запускает Claude Code напрямую, показывает его интерфейс
+# Статус определяется по изменениям в PRD.md
 
 MAX=${1:-100}
 SLEEP=${2:-2}
 STUCK_THRESHOLD=${3:-5}
 
-# === ЦВЕТА (ANSI) ===
+# === ЦВЕТА ===
 RED='\e[31m'
 GREEN='\e[32m'
 YELLOW='\e[33m'
@@ -20,8 +20,9 @@ iteration=0
 consecutive_failures=0
 start_time=$(date +%s)
 
-# === PROMPT TEMPLATE ===
-PROMPT_TEMPLATE='You are Ralph, an autonomous coding agent. Execute exactly ONE task per iteration.
+# === PROMPT ===
+read -r -d '' PROMPT_TEMPLATE << 'PROMPT_END'
+You are Ralph, an autonomous coding agent. Execute exactly ONE task per iteration.
 
 ## Your Algorithm
 
@@ -29,32 +30,20 @@ PROMPT_TEMPLATE='You are Ralph, an autonomous coding agent. Execute exactly ONE 
 2. **Read progress.txt** - check Learnings section for patterns
 3. **Implement that ONE criterion only**
 4. **Run verification** - typecheck, tests, or browser check as specified
-5. **Complete the iteration** (see rules below)
-
-## Required Tools
-
-- **For UI/Frontend tasks:** Read `/mnt/skills/public/frontend-design/SKILL.md` first
-- **For E2E tests:** Use Playwright
+5. **Update files and commit**
 
 ## If Tests PASS
 
 1. Update PRD.md: change [ ] to [x] for the completed criterion
 2. Commit: git add -A && git commit -m "feat: [criterion description]"
 3. Append to progress.txt what was done
-4. Output exactly: <r>SUCCESS</r>
 
 ## If Tests FAIL
 
 1. Do NOT mark criterion as complete
-2. Do NOT commit broken code
+2. Do NOT commit broken code  
 3. Append to progress.txt what went wrong
-4. Output exactly: <r>FAILED</r>
-
-## End Condition
-
-After completing, check PRD.md:
-- If ALL criteria are [x] -> output: <promise>COMPLETE</promise>
-- Otherwise -> output <r>SUCCESS</r> or <r>FAILED</r>'
+PROMPT_END
 
 # === ФУНКЦИИ ===
 count_remaining() {
@@ -71,6 +60,7 @@ get_elapsed() {
     printf "%02d:%02d:%02d" $((diff/3600)) $(((diff%3600)/60)) $((diff%60))
 }
 
+# Получить текущую User Story и критерии с маркерами
 get_current_task_block() {
     local first_incomplete_line=$(grep -n '^\- \[ \]' PRD.md 2>/dev/null | head -1 | cut -d: -f1)
     
@@ -97,15 +87,16 @@ get_current_task_block() {
         end_line=$total_lines
     fi
     
+    # Выводим с цветовыми маркерами используя awk
     sed -n "${us_line_num},${end_line}p" PRD.md | awk '
     BEGIN { found_current = 0 }
     /^- \[x\]/ { 
-        print $0 "  \033[32m<-- DONE\033[0m"
+        print "\033[32m" $0 "  <-- DONE\033[0m"
         next 
     }
     /^- \[ \]/ { 
         if (found_current == 0) {
-            print "\033[1;33m" $0 "\033[0m  \033[33m<-- CURRENT\033[0m"
+            print "\033[1;33m" $0 "  <-- CURRENT\033[0m"
             found_current = 1
         } else {
             print "\033[2m" $0 "\033[0m"
@@ -136,9 +127,53 @@ progress_bar() {
     printf "] %d/%d (%d%%)" "$done" "$total" "$pct"
 }
 
+show_header() {
+    local remaining=$(count_remaining)
+    local completed=$(count_completed)
+    local total=$((completed + remaining))
+    
+    echo ""
+    echo "================================================================"
+    echo -e "  ${BOLD}RALPH LOOP${NC} - Iteration $iteration"
+    echo "================================================================"
+    echo ""
+    echo -n "  Progress: "
+    progress_bar "$completed" "$total"
+    echo ""
+    echo "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD"
+    echo ""
+    echo "----------------------------------------------------------------"
+    echo "  CURRENT TASK"
+    echo "----------------------------------------------------------------"
+    get_current_task_block | while IFS= read -r line; do
+        echo -e "  $line"
+    done
+    echo ""
+    echo "----------------------------------------------------------------"
+    echo "  GIT LOG (last 3 commits)"
+    echo "----------------------------------------------------------------"
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        local commits=$(git log --oneline -3 2>/dev/null)
+        if [[ -n "$commits" ]]; then
+            echo "$commits" | while read -r line; do
+                echo "  $line"
+            done
+        else
+            echo "  (no commits yet)"
+        fi
+    else
+        echo "  (not a git repository)"
+    fi
+    echo ""
+    echo "================================================================"
+    echo -e "  ${CYAN}CLAUDE CODE OUTPUT${NC} (below)"
+    echo "================================================================"
+    echo ""
+}
+
 # === ПРОВЕРКА ФАЙЛОВ ===
 if [[ ! -f "PRD.md" ]]; then
-    echo "ERROR: PRD.md not found!"
+    echo -e "${RED}ERROR: PRD.md not found!${NC}"
     exit 1
 fi
 
@@ -152,14 +187,14 @@ if [[ ! -f "progress.txt" ]]; then
 EOF
 fi
 
-# === TRAP ДЛЯ CTRL+C ===
+# === TRAP ===
 cleanup() {
     echo ""
-    echo "------------------------------------------------------------"
+    echo "----------------------------------------------------------------"
     echo "Ralph Loop interrupted"
     echo "Completed: $(count_completed) | Remaining: $(count_remaining)"
     echo "Time: $(get_elapsed)"
-    echo "------------------------------------------------------------"
+    echo "----------------------------------------------------------------"
     exit 130
 }
 trap cleanup INT TERM
@@ -168,135 +203,87 @@ trap cleanup INT TERM
 while true; do
     ((iteration++))
     
-    remaining=$(count_remaining)
-    completed=$(count_completed)
-    total=$((completed + remaining))
+    # Считаем до запуска Claude
+    remaining_before=$(count_remaining)
+    completed_before=$(count_completed)
     
     # Все задачи выполнены?
-    if [[ "$remaining" -eq 0 ]] || [[ -z "$remaining" ]]; then
+    if [[ "$remaining_before" -eq 0 ]] || [[ -z "$remaining_before" ]]; then
         echo ""
-        echo -e "${GREEN}============================================${NC}"
+        echo -e "${GREEN}================================================================${NC}"
         echo -e "${GREEN}  ALL TASKS COMPLETE!${NC}"
-        echo -e "${GREEN}============================================${NC}"
-        echo "Total iterations: $iteration"
-        echo "Time: $(get_elapsed)"
-        echo "Completed: $completed tasks"
+        echo -e "${GREEN}================================================================${NC}"
+        echo "  Total iterations: $iteration"
+        echo "  Time: $(get_elapsed)"
+        echo "  Completed: $completed_before tasks"
         exit 0
     fi
 
     # Лимит итераций?
     if [[ $MAX -ne 0 && $iteration -gt $MAX ]]; then
         echo ""
-        echo -e "${YELLOW}============================================${NC}"
+        echo -e "${YELLOW}================================================================${NC}"
         echo -e "${YELLOW}  Reached max iterations ($MAX)${NC}"
-        echo -e "${YELLOW}============================================${NC}"
-        echo "Completed: $completed | Remaining: $remaining"
-        echo "To continue: ./ralph.sh $MAX $SLEEP $STUCK_THRESHOLD"
+        echo -e "${YELLOW}================================================================${NC}"
+        echo "  Completed: $completed_before | Remaining: $remaining_before"
+        echo "  To continue: ./ralph.sh $MAX $SLEEP $STUCK_THRESHOLD"
         exit 1
     fi
 
-    # === HEADER ===
-    echo ""
-    echo "============================================================"
-    echo "  RALPH LOOP - Iteration $iteration / $([ $MAX -eq 0 ] && echo 'unlimited' || echo $MAX)"
-    echo "============================================================"
-    echo ""
-    echo -n "  Progress: "
-    progress_bar "$completed" "$total"
-    echo ""
-    echo "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD"
-    echo ""
+    # Показываем header
+    show_header
     
-    # === ТЕКУЩАЯ ЗАДАЧА ИЗ PRD ===
-    echo "------------------------------------------------------------"
-    echo "  CURRENT TASK FROM PRD.md"
-    echo "------------------------------------------------------------"
-    get_current_task_block | head -20 | while IFS= read -r line; do
-        echo -e "  $line"
-    done
-    echo ""
+    # Запускаем Claude напрямую (он покажет свой UI)
+    claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE"
+    claude_exit_code=$?
     
-    # === GIT COMMITS ===
-    echo "------------------------------------------------------------"
-    echo "  RECENT GIT COMMITS"
-    echo "------------------------------------------------------------"
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-        commits=$(git log --oneline -3 2>/dev/null)
-        if [[ -n "$commits" ]]; then
-            echo "$commits" | while read -r line; do
-                echo "  $line"
-            done
-        else
-            echo "  (no commits yet)"
-        fi
+    echo ""
+    echo "================================================================"
+    
+    # Считаем после Claude
+    remaining_after=$(count_remaining)
+    completed_after=$(count_completed)
+    
+    # Определяем статус по изменениям в PRD.md
+    if [[ $claude_exit_code -ne 0 ]]; then
+        echo -e "  ${RED}[ERROR] Claude exited with code $claude_exit_code${NC}"
+        ((consecutive_failures++))
+    elif [[ "$completed_after" -gt "$completed_before" ]]; then
+        echo -e "  ${GREEN}[OK] Task completed! ($completed_before -> $completed_after)${NC}"
+        consecutive_failures=0
+    elif [[ "$remaining_after" -lt "$remaining_before" ]]; then
+        echo -e "  ${GREEN}[OK] Progress made!${NC}"
+        consecutive_failures=0
     else
-        echo "  (not a git repository)"
+        echo -e "  ${YELLOW}[?] No progress detected${NC}"
+        ((consecutive_failures++))
     fi
-    echo ""
     
-    # === CLAUDE OUTPUT ===
-    echo "------------------------------------------------------------"
-    echo "  CLAUDE OUTPUT"
-    echo "------------------------------------------------------------"
-    echo ""
-
-    # Используем script для захвата вывода И показа в реальном времени
-    output_file=$(mktemp)
-    
-    # script записывает весь вывод терминала в файл
-    # -q = quiet, -c = command
-    script -q -c "claude --dangerously-skip-permissions -p \"$PROMPT_TEMPLATE\"" "$output_file"
-    exit_code=$?
-    
-    echo ""
-    
-    # Читаем результат (убираем управляющие символы)
-    result=$(cat "$output_file" 2>/dev/null | tr -d '\r' | sed 's/\x1b\[[0-9;]*m//g')
-    rm -f "$output_file"
-
-    echo "------------------------------------------------------------"
     echo "  Elapsed: $(get_elapsed)"
-    echo "------------------------------------------------------------"
-
-    # Ошибка?
-    if [[ -z "$result" ]]; then
-        echo -e "  ${YELLOW}[!] Empty response, retrying...${NC}"
-        sleep "$SLEEP"
-        continue
-    fi
-
-    # Все выполнено?
-    if [[ "$result" == *"COMPLETE"* ]] || [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
+    echo "================================================================"
+    
+    # Проверяем stuck
+    if [[ $consecutive_failures -ge $STUCK_THRESHOLD ]]; then
         echo ""
-        echo -e "${GREEN}============================================${NC}"
+        echo -e "${RED}================================================================${NC}"
+        echo -e "${RED}  STUCK: $STUCK_THRESHOLD consecutive failures${NC}"
+        echo -e "${RED}================================================================${NC}"
+        echo "  Check progress.txt for details"
+        echo "  Fix manually, then: ./ralph.sh $MAX $SLEEP $STUCK_THRESHOLD"
+        exit 2
+    fi
+    
+    # Все выполнено?
+    if [[ "$remaining_after" -eq 0 ]]; then
+        echo ""
+        echo -e "${GREEN}================================================================${NC}"
         echo -e "${GREEN}  ALL TASKS COMPLETE!${NC}"
-        echo -e "${GREEN}============================================${NC}"
-        echo "Iterations: $iteration | Time: $(get_elapsed)"
+        echo -e "${GREEN}================================================================${NC}"
+        echo "  Iterations: $iteration | Time: $(get_elapsed)"
         exit 0
     fi
-
-    # Проверка статуса
-    if [[ "$result" == *"SUCCESS"* ]] || [[ "$result" == *"<r>SUCCESS</r>"* ]]; then
-        echo -e "  ${GREEN}[OK] Task completed successfully${NC}"
-        consecutive_failures=0
-    elif [[ "$result" == *"FAILED"* ]] || [[ "$result" == *"<r>FAILED</r>"* ]]; then
-        ((consecutive_failures++))
-        echo -e "  ${RED}[FAIL] Task failed (attempt $consecutive_failures/$STUCK_THRESHOLD)${NC}"
-        
-        if [[ $consecutive_failures -ge $STUCK_THRESHOLD ]]; then
-            echo ""
-            echo -e "${RED}============================================${NC}"
-            echo -e "${RED}  STUCK: $STUCK_THRESHOLD consecutive failures${NC}"
-            echo -e "${RED}============================================${NC}"
-            echo "Check progress.txt for details"
-            exit 2
-        fi
-    else
-        echo -e "  ${YELLOW}[?] No status tag found in response${NC}"
-    fi
-
+    
     echo ""
-    echo "  Next iteration in ${SLEEP}s..."
-    echo "============================================================"
+    echo "  Next iteration in ${SLEEP}s... (Ctrl+C to stop)"
     sleep "$SLEEP"
 done

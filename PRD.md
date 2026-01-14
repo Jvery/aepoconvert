@@ -808,13 +808,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want a friendly error page.
 
 **Acceptance Criteria:**
-- [ ] Create `src/app/error.tsx` (client component)
-- [ ] Display "Something went wrong" message
-- [ ] Show retry button that calls reset()
-- [ ] Link to home page
-- [ ] Match app design style
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/app/error.tsx` (client component)
+- [x] Display "Something went wrong" message
+- [x] Show retry button that calls reset()
+- [x] Link to home page
+- [x] Match app design style
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
