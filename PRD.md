@@ -843,8 +843,8 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 - [x] Screen reader announces status changes (aria-live regions)
 - [x] Keyboard navigation works: Tab through all controls
 - [x] Skip link to main content
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

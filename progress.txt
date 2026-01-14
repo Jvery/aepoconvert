@@ -1248,3 +1248,25 @@
 - Use `inert` attribute to remove elements from both accessibility tree and tab order
 - Spread syntax `{...(!isOpen && { inert: true })}` cleanly applies conditional boolean attributes
 - React doesn't emit warning for `inert={true}` unlike `inert=""`
+
+---
+
+### Iteration 65 - US-060 (Criterion 6): Skip link to main content
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/layout/SkipLink.tsx` component for keyboard navigation accessibility
+- Skip link is visually hidden by default using `sr-only` class
+- Becomes visible on focus using `focus:not-sr-only` with fixed positioning (z-100)
+- Styled with background, border, shadow, and focus ring for clear visibility
+- Links to `#main-content` and handles click by focusing the main element
+- Added `id="main-content"` and `tabIndex={-1}` to main element in layout.tsx
+- Added `focus:outline-none` to main to prevent unsightly focus outline when programmatically focused
+- SkipLink is first focusable element, placed right after NextIntlClientProvider opens
+- Verified typecheck passes with `npm run build`
+- Verified skip link appears when pressing Tab and navigates to main content on Enter
+
+**Learnings:**
+- Use `sr-only focus:not-sr-only` pattern for skip links - hidden by default, visible when focused
+- Main element needs `tabIndex={-1}` to be programmatically focusable (divs aren't focusable by default)
+- Use `focus:outline-none` on main to hide the browser's default focus outline when jumping to content
+- Skip link should be the very first element in the DOM for proper keyboard navigation order
