@@ -23,8 +23,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "aepoconvert",
-  description: "Free online file converter",
+  title: "aepoconvert — Free Online File Converter",
+  description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser.",
+  keywords: ["file converter", "image converter", "audio converter", "document converter", "online converter", "free converter", "privacy", "browser-based", "WebAssembly"],
+  authors: [{ name: "aepoconvert" }],
+  creator: "aepoconvert",
+  metadataBase: new URL("https://aepoconvert.com"),
+  openGraph: {
+    title: "aepoconvert — Free Online File Converter",
+    description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser.",
+    type: "website",
+    url: "https://aepoconvert.com",
+    siteName: "aepoconvert",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "aepoconvert — Free Online File Converter",
+    description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser.",
+    creator: "@aepoconvert",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 type Props = {

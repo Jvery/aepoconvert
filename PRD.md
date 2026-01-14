@@ -781,13 +781,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need proper SEO setup.
 
 **Acceptance Criteria:**
-- [ ] Update `src/app/layout.tsx` metadata export
-- [ ] Title: "aepoconvert — Free Online File Converter"
-- [ ] Description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser."
-- [ ] Open Graph: title, description, type, url
-- [ ] Twitter card meta tags
-- [ ] Add favicon.ico to /app
-- [ ] Typecheck passes
+- [x] Update `src/app/layout.tsx` metadata export
+- [x] Title: "aepoconvert — Free Online File Converter"
+- [x] Description: "Convert images, audio, and documents for free. 100% private — all processing happens in your browser."
+- [x] Open Graph: title, description, type, url
+- [x] Twitter card meta tags
+- [x] Add favicon.ico to /app
+- [x] Typecheck passes
 
 ---
 
