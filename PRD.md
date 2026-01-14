@@ -795,12 +795,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want a friendly 404 page.
 
 **Acceptance Criteria:**
-- [ ] Create `src/app/not-found.tsx`
-- [ ] Display "Page not found" message
-- [ ] Link back to home page
-- [ ] Match app design style
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/app/not-found.tsx`
+- [x] Display "Page not found" message
+- [x] Link back to home page
+- [x] Match app design style
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
