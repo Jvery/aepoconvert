@@ -1029,3 +1029,27 @@
 - Use responsive breakpoints consistently: < 640px (mobile), >= 640px (sm), >= 1024px (lg)
 
 ---
+
+### Iteration 53 - US-053: Add file size limits and warnings
+**Status:** ✅ SUCCESS
+**What was done:**
+- Added file size constants: MAX_FILE_SIZE (2GB), LARGE_FILE_WARNING_SIZE (100MB), ESTIMATED_TIME_THRESHOLD (50MB)
+- Added formatFileSize() helper function for human-readable file sizes (B, KB, MB, GB, TB)
+- Added estimateConversionTime() function to estimate conversion duration (~5MB/s)
+- Added formatDuration() helper for human-readable time estimates
+- Updated DropZone.tsx handleFiles() to validate file sizes:
+  - Block files > 2GB with error toast showing file size
+  - Warn for files > 100MB with warning toast
+  - Show info toast with estimated conversion time for files > 50MB
+- Updated DragOverlay.tsx handleDrop() with identical file size validation logic
+- File size displayed in human-readable format (verified: "9 B" for test file)
+- Verified typecheck passes with `npm run build`
+- Verified changes work in browser with Playwright
+
+**Learnings:**
+- Use consistent file size validation in both DropZone and DragOverlay for uniform UX
+- Estimate conversion time at ~5MB/s as rough baseline (varies by format and settings)
+- Track multiple categories separately: blocked (>2GB), large (>100MB), needs-estimate (>50MB)
+- Show the largest file's estimate when multiple files need time estimates
+
+---

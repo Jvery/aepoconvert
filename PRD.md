@@ -751,15 +751,15 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need Docker configuration for easy deployment.
 
 **Acceptance Criteria:**
-- [ ] Create `Dockerfile` with multi-stage build
-- [ ] Stage 1: deps - install dependencies
-- [ ] Stage 2: builder - build Next.js app
-- [ ] Stage 3: runner - production image with node:alpine
-- [ ] Set NODE_ENV=production
-- [ ] Expose port 3000
-- [ ] CMD ["node", "server.js"] for standalone output
-- [ ] Update next.config.ts with output: 'standalone'
-- [ ] Typecheck passes
+- [x] Create `Dockerfile` with multi-stage build
+- [x] Stage 1: deps - install dependencies
+- [x] Stage 2: builder - build Next.js app
+- [x] Stage 3: runner - production image with node:alpine
+- [x] Set NODE_ENV=production
+- [x] Expose port 3000
+- [x] CMD ["node", "server.js"] for standalone output
+- [x] Update next.config.ts with output: 'standalone'
+- [x] Typecheck passes
 
 ---
 
