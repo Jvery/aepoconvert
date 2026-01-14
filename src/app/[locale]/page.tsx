@@ -7,9 +7,20 @@ import { FileList } from "@/components/files/FileList";
 import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { DropZone } from "@/components/upload/DropZone";
 import { useConversionStore } from "@/store/conversion-store";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const files = useConversionStore((state) => state.files);
+  const { showClearConfirmation, confirmClearAll, cancelClearAll } = useKeyboardShortcuts();
 
   return (
     <div className="relative isolate overflow-hidden">
@@ -42,6 +53,26 @@ export default function Home() {
           </section>
         </div>
       </div>
+
+      {/* Keyboard Shortcut Clear Confirmation Dialog */}
+      <Dialog open={showClearConfirmation} onOpenChange={(open) => !open && cancelClearAll()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Clear all files?</DialogTitle>
+            <DialogDescription>
+              This will remove all files from the list. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={cancelClearAll}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmClearAll}>
+              Clear All
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -653,13 +653,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to use keyboard shortcuts for efficiency.
 
 **Acceptance Criteria:**
-- [ ] Create `src/hooks/useKeyboardShortcuts.ts`
-- [ ] Ctrl/Cmd + V: paste files from clipboard
-- [ ] Ctrl/Cmd + Enter: start conversion
-- [ ] Escape: clear all (with confirmation)
-- [ ] Add hook to main page
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/hooks/useKeyboardShortcuts.ts`
+- [x] Ctrl/Cmd + V: paste files from clipboard
+- [x] Ctrl/Cmd + Enter: start conversion
+- [x] Escape: clear all (with confirmation)
+- [x] Add hook to main page
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

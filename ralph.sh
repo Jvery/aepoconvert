@@ -22,6 +22,7 @@ current_us=""
 current_criterion=""
 last_status="starting"
 start_time=$(date +%s)
+output_file=""
 
 # === PROMPT TEMPLATE ===
 PROMPT_TEMPLATE='You are Ralph, an autonomous coding agent. Execute exactly ONE task per iteration.
@@ -117,89 +118,6 @@ progress_bar() {
     printf "] %d/%d (%d%%)" "$done" "$total" "$pct"
 }
 
-# === ОТРИСОВКА HEADER ===
-draw_header() {
-    clear
-    
-    local completed=$(count_completed)
-    local remaining=$(count_remaining)
-    local total=$((completed + remaining))
-    
-    echo "============================================================"
-    echo "  RALPH LOOP"
-    echo "============================================================"
-    echo ""
-    echo "  Iteration:  $iteration / $([ $MAX -eq 0 ] && echo 'unlimited' || echo $MAX)"
-    echo "  Elapsed:    $(get_elapsed)"
-    echo "  Failures:   $consecutive_failures / $STUCK_THRESHOLD"
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  PROGRESS"
-    echo "------------------------------------------------------------"
-    echo -n "  "
-    progress_bar "$completed" "$total"
-    echo ""
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  CURRENT USER STORY"
-    echo "------------------------------------------------------------"
-    echo -e "  ${CYAN}${current_us}${NC}"
-    echo ""
-    echo "  Next criterion:"
-    echo -e "  ${DIM}${current_criterion}${NC}"
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  STATUS"
-    echo "------------------------------------------------------------"
-    case "$last_status" in
-        "working")
-            echo -e "  ${YELLOW}[...] Claude is working${NC}"
-            ;;
-        "success")
-            echo -e "  ${GREEN}[OK]  Task completed successfully${NC}"
-            ;;
-        "failed")
-            echo -e "  ${RED}[FAIL] Task failed (attempt $consecutive_failures/$STUCK_THRESHOLD)${NC}"
-            ;;
-        "retrying")
-            echo -e "  ${YELLOW}[...] Retrying...${NC}"
-            ;;
-        "complete")
-            echo -e "  ${GREEN}[DONE] All tasks complete!${NC}"
-            ;;
-        "stuck")
-            echo -e "  ${RED}[STUCK] Manual intervention required${NC}"
-            ;;
-        *)
-            echo -e "  ${DIM}Starting...${NC}"
-            ;;
-    esac
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  RECENT GIT COMMITS"
-    echo "------------------------------------------------------------"
-    if git log --oneline -3 2>/dev/null | head -3 | while read -r line; do
-        echo "  $line"
-    done; then
-        :
-    else
-        echo "  (no commits yet)"
-    fi
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  PROMPT SENT TO CLAUDE"
-    echo "------------------------------------------------------------"
-    echo -e "  ${DIM}(First 5 lines of prompt)${NC}"
-    echo "$PROMPT_TEMPLATE" | head -5 | while IFS= read -r line; do
-        echo "  ${line:0:60}"
-    done
-    echo "  ..."
-    echo ""
-    echo "------------------------------------------------------------"
-    echo "  CLAUDE OUTPUT (streaming)"
-    echo "------------------------------------------------------------"
-}
-
 # === ПРОВЕРКА ФАЙЛОВ ===
 if [[ ! -f "PRD.md" ]]; then
     echo "ERROR: PRD.md not found!"
@@ -218,6 +136,9 @@ fi
 
 # === TRAP ДЛЯ CTRL+C ===
 cleanup() {
+    # Убиваем фоновые процессы
+    jobs -p | xargs -r kill 2>/dev/null
+    [[ -n "$output_file" ]] && rm -f "$output_file"
     echo ""
     echo ""
     echo "------------------------------------------------------------"
@@ -234,25 +155,27 @@ while true; do
     
     remaining=$(count_remaining)
     completed=$(count_completed)
+    total=$((completed + remaining))
     current_us=$(get_current_us)
     current_criterion=$(get_current_criterion)
     
     # Все задачи выполнены?
     if [[ "$remaining" -eq 0 ]] || [[ -z "$remaining" ]]; then
         last_status="complete"
-        draw_header
+        clear
         echo ""
         echo -e "${GREEN}============================================${NC}"
         echo -e "${GREEN}  ALL TASKS COMPLETE!${NC}"
         echo -e "${GREEN}============================================${NC}"
         echo "Total iterations: $iteration"
         echo "Time: $(get_elapsed)"
+        echo "Completed: $completed tasks"
         exit 0
     fi
 
     # Лимит итераций?
     if [[ $MAX -ne 0 && $iteration -gt $MAX ]]; then
-        draw_header
+        clear
         echo ""
         echo -e "${YELLOW}============================================${NC}"
         echo -e "${YELLOW}  Reached max iterations ($MAX)${NC}"
@@ -262,36 +185,89 @@ while true; do
         exit 1
     fi
 
-    last_status="working"
-    draw_header
+    # === ПОКАЗ HEADER ===
+    clear
+    echo "============================================================"
+    echo "  RALPH LOOP - Iteration $iteration / $([ $MAX -eq 0 ] && echo 'unlimited' || echo $MAX)"
+    echo "============================================================"
+    echo ""
+    echo -n "  Progress: "
+    progress_bar "$completed" "$total"
+    echo ""
+    echo "  Elapsed: $(get_elapsed) | Failures: $consecutive_failures/$STUCK_THRESHOLD"
+    echo ""
+    echo "------------------------------------------------------------"
+    echo "  CURRENT TASK"
+    echo "------------------------------------------------------------"
+    echo -e "  User Story: ${CYAN}${current_us}${NC}"
+    echo -e "  Criterion:  ${BOLD}${current_criterion}${NC}"
+    echo ""
+    echo "------------------------------------------------------------"
+    echo "  RECENT GIT COMMITS"
+    echo "------------------------------------------------------------"
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        git log --oneline -3 2>/dev/null | while read -r line; do
+            echo "  $line"
+        done
+        [[ $(git log --oneline -1 2>/dev/null | wc -l) -eq 0 ]] && echo "  (no commits yet)"
+    else
+        echo "  (not a git repository)"
+    fi
+    echo ""
+    echo "------------------------------------------------------------"
+    echo "  CLAUDE OUTPUT"
+    echo "------------------------------------------------------------"
 
-    # === ЗАПУСК CLAUDE СО СТРИМИНГОМ ===
-    # Используем tee для одновременного показа и сохранения
+    # === ЗАПУСК CLAUDE С РЕАЛЬНЫМ СТРИМИНГОМ ===
     output_file=$(mktemp)
     
-    echo -e "  ${DIM}>>> Starting Claude...${NC}"
-    echo ""
+    # Запускаем Claude в фоне, пишем в файл
+    claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE" > "$output_file" 2>&1 &
+    claude_pid=$!
     
-    # Запускаем claude и показываем вывод в реальном времени
-    # Используем script для захвата unbuffered output или просто tee
-    {
-        claude --dangerously-skip-permissions -p "$PROMPT_TEMPLATE" 2>&1
-    } | tee "$output_file" | while IFS= read -r line; do
-        # Показываем каждую строку с отступом
-        echo "  ${line:0:70}"
+    # Даем Claude начать
+    sleep 0.5
+    
+    # Стримим вывод пока Claude работает
+    last_line_count=0
+    while kill -0 "$claude_pid" 2>/dev/null; do
+        if [[ -f "$output_file" ]]; then
+            current_line_count=$(wc -l < "$output_file" 2>/dev/null || echo 0)
+            if [[ "$current_line_count" -gt "$last_line_count" ]]; then
+                # Показываем новые строки
+                tail -n $((current_line_count - last_line_count)) "$output_file" 2>/dev/null | while IFS= read -r line; do
+                    echo "  ${line:0:74}"
+                done
+                last_line_count=$current_line_count
+            fi
+        fi
+        sleep 0.3
     done
     
-    exit_code=${PIPESTATUS[0]}
+    # Ждем завершения и получаем код выхода
+    wait "$claude_pid"
+    exit_code=$?
+    
+    # Показываем оставшийся вывод
+    if [[ -f "$output_file" ]]; then
+        current_line_count=$(wc -l < "$output_file" 2>/dev/null || echo 0)
+        if [[ "$current_line_count" -gt "$last_line_count" ]]; then
+            tail -n $((current_line_count - last_line_count)) "$output_file" 2>/dev/null | while IFS= read -r line; do
+                echo "  ${line:0:74}"
+            done
+        fi
+    fi
     
     result=$(cat "$output_file" 2>/dev/null)
     rm -f "$output_file"
+    output_file=""
 
     echo ""
     echo "------------------------------------------------------------"
 
     # Ошибка Claude?
     if [[ $exit_code -ne 0 ]] || [[ -z "$result" ]]; then
-        echo -e "  ${YELLOW}Claude error or empty response, retrying...${NC}"
+        echo -e "  ${YELLOW}[!] Claude error or empty response, retrying...${NC}"
         last_status="retrying"
         sleep "$SLEEP"
         continue
@@ -299,7 +275,6 @@ while true; do
 
     # Все выполнено?
     if [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
-        last_status="complete"
         echo ""
         echo -e "${GREEN}============================================${NC}"
         echo -e "${GREEN}  ALL TASKS COMPLETE!${NC}"
@@ -319,23 +294,23 @@ while true; do
         last_status="failed"
         
         if [[ $consecutive_failures -ge $STUCK_THRESHOLD ]]; then
-            last_status="stuck"
             echo ""
             echo -e "${RED}============================================${NC}"
             echo -e "${RED}  STUCK: $STUCK_THRESHOLD consecutive failures${NC}"
             echo -e "${RED}============================================${NC}"
             echo "Task: $current_us"
             echo "Criterion: $current_criterion"
+            echo ""
             echo "Check progress.txt for details"
             echo "Fix manually, then: ./ralph.sh $MAX $SLEEP $STUCK_THRESHOLD"
             exit 2
         fi
     else
-        echo -e "  ${YELLOW}[?] No status tag found${NC}"
+        echo -e "  ${YELLOW}[?] No status tag found in response${NC}"
     fi
 
     echo ""
-    echo "  Sleeping ${SLEEP}s before next iteration..."
+    echo "  Next iteration in ${SLEEP}s... (Ctrl+C to stop)"
     echo "============================================================"
     sleep "$SLEEP"
 done

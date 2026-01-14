@@ -883,3 +883,22 @@
 - FFmpeg requires SharedArrayBuffer which needs COOP/COEP headers (not available in dev without config)
 
 ---
+
+### Iteration 46 - US-046: Create error handling for conversions
+**Status:** ✅ SUCCESS
+**What was done:**
+- Updated FileCard to show red border (border-destructive border-2 bg-destructive/5) when status is 'error'
+- Added error message display below file name with AlertCircle icon and destructive text styling
+- Created retry button panel that replaces the format selector when in error state
+- Retry button styled with destructive border/text and RotateCcw icon
+- Added `retryFile(id)` action to conversion-store that resets status to 'pending', clears progress/error/result
+- Wired retry functionality in FileList to pass onRetry callback to FileCard
+- Verified typecheck passes with `npm run build`
+- Verified all error states and retry functionality work correctly in browser with Playwright
+
+**Learnings:**
+- Use cn() utility with conditional class to apply error border styling dynamically
+- Conditionally render different bottom panels (format selector vs retry) based on error state
+- Retry action only works if file.status === 'error' to prevent accidental resets
+
+---
