@@ -695,14 +695,14 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want a visually appealing animated background.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/layout/GradientBackground.tsx`
-- [ ] Animated gradient blobs using CSS animation
-- [ ] Low opacity (0.1-0.2) to not distract
-- [ ] Fixed position behind content (z-0)
-- [ ] Respect prefers-reduced-motion media query
-- [ ] Add to layout.tsx
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/layout/GradientBackground.tsx`
+- [x] Animated gradient blobs using CSS animation
+- [x] Low opacity (0.1-0.2) to not distract
+- [x] Fixed position behind content (z-0)
+- [x] Respect prefers-reduced-motion media query
+- [x] Add to layout.tsx
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

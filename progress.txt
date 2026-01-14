@@ -943,3 +943,22 @@
 - Responsive layout with `flex-col sm:flex-row` stacks on mobile, spreads on desktop
 
 ---
+
+### Iteration 49 - US-049: Create PrivacyBadge component
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/status/PrivacyBadge.tsx` with ShieldCheck icon and "100% Private" text
+- Used shadcn Tooltip component with TooltipProvider, TooltipTrigger, TooltipContent
+- Tooltip shows "Your files never leave your device" with detailed explanation about WebAssembly processing
+- Badge styled with green color scheme (border-green-500/20, bg-green-500/10, text-green-600)
+- Added cursor-help for discoverability and hover:bg-green-500/15 for interactivity
+- Placed PrivacyBadge above DropZone in the page layout with centered flex container
+- Verified typecheck passes with `npm run build`
+- Verified tooltip appears on hover in browser with Playwright screenshot
+
+**Learnings:**
+- TooltipProvider must wrap Tooltip for shadcn tooltip to work
+- cursor-help indicates to users that the element has additional information
+- Green color scheme (500/10, 500/20) works well for positive/secure messaging
+
+---
