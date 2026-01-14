@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { DragOverlay } from '@/components/layout/DragOverlay';
+import { ConverterStatus } from '@/components/status/ConverterStatus';
 import { Toaster } from '@/components/ui/sonner';
 import "../globals.css";
 
@@ -50,6 +51,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             {children}
           </main>
           <DragOverlay />
+          <ConverterStatus />
           <Toaster />
         </NextIntlClientProvider>
       </body>

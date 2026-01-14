@@ -626,13 +626,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to know when converters are loading.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/status/ConverterStatus.tsx`
-- [ ] Show loading spinners while WASM libraries initialize
-- [ ] Show checkmarks when ready
-- [ ] Show error state if initialization fails
-- [ ] Display in footer or corner of page
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/status/ConverterStatus.tsx`
+- [x] Show loading spinners while WASM libraries initialize
+- [x] Show checkmarks when ready
+- [x] Show error state if initialization fails
+- [x] Display in footer or corner of page
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
