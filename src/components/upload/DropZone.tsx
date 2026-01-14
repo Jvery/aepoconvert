@@ -174,11 +174,12 @@ export function DropZone({ disabled = false, className = '' }: DropZoneProps) {
       aria-label="Drop files here or click to browse"
       aria-disabled={disabled}
       className={`
-        relative min-h-[200px] w-full
-        flex flex-col items-center justify-center gap-4
+        relative min-h-[160px] sm:min-h-[200px] w-full
+        flex flex-col items-center justify-center gap-3 sm:gap-4
         rounded-xl border-2 border-dashed
         cursor-pointer
         transition-all duration-200 ease-out
+        px-4 py-6 sm:py-8
         focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
         ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
         ${isDragging
@@ -189,19 +190,19 @@ export function DropZone({ disabled = false, className = '' }: DropZoneProps) {
       `}
     >
       {/* Upload Icon */}
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-        <Upload className="h-8 w-8 text-primary" />
+      <div className="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary/10">
+        <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
       </div>
 
       {/* Text */}
-      <div className="text-center">
-        <p className="text-lg font-medium text-foreground">
+      <div className="text-center px-2">
+        <p className="text-base sm:text-lg font-medium text-foreground">
           Drop files here or click to browse
         </p>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
           Supports images, audio, and documents
         </p>
-        <p className="mt-2 text-xs text-muted-foreground/70">
+        <p className="mt-2 text-xs text-muted-foreground/70 hidden sm:block">
           {getAcceptedExtensions()}
         </p>
       </div>

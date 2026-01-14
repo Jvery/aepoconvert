@@ -724,13 +724,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want the app to work well on mobile devices.
 
 **Acceptance Criteria:**
-- [ ] DropZone: full width, reduced height on mobile
-- [ ] FileList: single column on mobile (< 640px)
-- [ ] SettingsPanel: full width on mobile
-- [ ] Buttons: min-height 44px for touch
-- [ ] Test at 375px viewport width
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] DropZone: full width, reduced height on mobile
+- [x] FileList: single column on mobile (< 640px)
+- [x] SettingsPanel: full width on mobile
+- [x] Buttons: min-height 44px for touch
+- [x] Test at 375px viewport width
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

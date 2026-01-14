@@ -985,3 +985,25 @@
 - blur-3xl creates soft, dreamy blob edges perfect for ambient backgrounds
 
 ---
+
+### Iteration 51 - US-051: Add micro-animations to UI elements
+**Status:** ✅ SUCCESS
+**What was done:**
+- Updated button component with `hover:scale-[1.02] active:scale-[0.98]` transitions
+- Added `duration-200` for smooth animation timing
+- Added `disabled:hover:scale-100` to prevent scale on disabled buttons
+- Card hover shadow was already implemented in FileCard (`hover:shadow-md transition-all`)
+- Progress bar shimmer effect was already implemented in US-029 via CSS animation
+- Added pop animation to output format badge in FileCard using framer-motion AnimatePresence
+- Badge animates with scale 0.8→1 and opacity 0→1 when format changes
+- Used framer-motion `mode="wait"` for smooth exit/enter transitions
+- Verified typecheck passes with `npm run build`
+- Verified animations work in browser
+
+**Learnings:**
+- Combine hover:scale and active:scale for tactile button feedback
+- AnimatePresence with `mode="wait"` ensures exit animation completes before enter
+- Key prop on motion elements triggers re-animation when value changes
+- disabled:hover:scale-100 prevents awkward scaling on disabled elements
+
+---
