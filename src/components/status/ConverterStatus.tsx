@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Loader2, Check, AlertCircle, ImageIcon, Music, FileText } from 'lucide-react';
 import {
   Tooltip,
@@ -23,6 +23,7 @@ interface ConverterInfo {
 /**
  * ConverterStatus component displays the initialization status of WASM converters
  * Shows loading spinners while initializing, checkmarks when ready, and errors if failed
+ * Announces status changes to screen readers via aria-live
  */
 export function ConverterStatus() {
   const [converters, setConverters] = useState<ConverterInfo[]>([
@@ -30,6 +31,10 @@ export function ConverterStatus() {
     { name: 'audio', label: 'Audio', icon: Music, state: 'loading' },
     { name: 'document', label: 'Documents', icon: FileText, state: 'loading' },
   ]);
+
+  // Track announcements for screen readers
+  const [announcement, setAnnouncement] = useState('');
+  const prevConvertersRef = useRef<ConverterInfo[]>([]);
 
   useEffect(() => {
     // Initialize each converter separately to track individual failures
@@ -95,6 +100,40 @@ export function ConverterStatus() {
     initializeConverters();
   }, []);
 
+  // Announce status changes
+  useEffect(() => {
+    const prevConverters = prevConvertersRef.current;
+
+    // Check for newly ready or failed converters
+    converters.forEach((converter) => {
+      const prevConverter = prevConverters.find(c => c.name === converter.name);
+      if (prevConverter && prevConverter.state !== converter.state) {
+        if (converter.state === 'ready') {
+          setAnnouncement(`${converter.label} converter ready`);
+        } else if (converter.state === 'error') {
+          setAnnouncement(`${converter.label} converter failed to load`);
+        }
+      }
+    });
+
+    // Announce when all converters are ready
+    const allReady = converters.every((c) => c.state === 'ready');
+    const wasNotAllReady = prevConverters.length > 0 && !prevConverters.every((c) => c.state === 'ready');
+    if (allReady && wasNotAllReady) {
+      setAnnouncement('All converters ready. You can now convert files.');
+    }
+
+    prevConvertersRef.current = converters;
+  }, [converters]);
+
+  // Clear announcement after it's been read
+  useEffect(() => {
+    if (announcement) {
+      const timer = setTimeout(() => setAnnouncement(''), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [announcement]);
+
   // Check if all converters are ready
   const allReady = converters.every((c) => c.state === 'ready');
   const hasErrors = converters.some((c) => c.state === 'error');
@@ -102,6 +141,15 @@ export function ConverterStatus() {
 
   return (
     <TooltipProvider>
+      {/* Screen reader announcements for converter status changes */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {announcement}
+      </div>
       <div className="fixed bottom-4 right-4 z-40">
         <Tooltip>
           <TooltipTrigger asChild>

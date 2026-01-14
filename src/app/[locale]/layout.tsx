@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer';
 import { GradientBackground } from '@/components/layout/GradientBackground';
 import { DragOverlay } from '@/components/layout/DragOverlay';
 import { ConverterStatus } from '@/components/status/ConverterStatus';
+import { StatusAnnouncer } from '@/components/status/StatusAnnouncer';
 import { Toaster } from '@/components/ui/sonner';
 import "../globals.css";
 
@@ -85,6 +86,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Footer />
           <DragOverlay />
           <ConverterStatus />
+          <StatusAnnouncer />
           <Toaster />
         </NextIntlClientProvider>
       </body>
