@@ -1149,3 +1149,22 @@
 - PNG icons can be programmatically generated with Node.js zlib for simple solid-color placeholders
 
 ---
+
+### Iteration 60 - US-060 (Criterion 1): All buttons have aria-label when icon-only
+**Status:** ✅ SUCCESS
+**What was done:**
+- Audited all components for icon-only buttons (buttons with only icons, no visible text)
+- Found 2 icon-only buttons in the codebase:
+  1. Theme toggle button in Header.tsx (line 62-76) - already has dynamic aria-label "Switch to light/dark mode"
+  2. Remove file button in FileCard.tsx (line 112-120) - already has aria-label "Remove {filename}"
+- All other buttons have visible text content so don't require aria-label
+- GitHub link in Footer.tsx has aria-label="View source on GitHub"
+- DropZone div with role="button" has aria-label="Drop files here or click to browse"
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Icon-only buttons were already properly labeled during component implementation
+- Use `size="icon"` variant in shadcn Button to identify icon-only buttons
+- Good practice to include aria-label during initial component development, not as an afterthought
+
+---
