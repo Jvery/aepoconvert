@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { DragOverlay } from '@/components/layout/DragOverlay';
 import { ConverterStatus } from '@/components/status/ConverterStatus';
 import { Toaster } from '@/components/ui/sonner';
@@ -47,9 +48,10 @@ export default async function LocaleLayout({ children, params }: Props) {
       >
         <NextIntlClientProvider messages={messages}>
           <Header />
-          <main className="min-h-[calc(100vh-3.5rem)]">
+          <main className="min-h-[calc(100vh-7rem)]">
             {children}
           </main>
+          <Footer />
           <DragOverlay />
           <ConverterStatus />
           <Toaster />

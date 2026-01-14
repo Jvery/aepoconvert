@@ -902,3 +902,24 @@
 - Retry action only works if file.status === 'error' to prevent accidental resets
 
 ---
+
+### Iteration 47 - US-047: Add keyboard shortcuts
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/hooks/useKeyboardShortcuts.ts` with global keyboard event handling
+- Implemented Ctrl/Cmd + V: paste files from clipboard using Clipboard API
+- Implemented Ctrl/Cmd + Enter: start conversion (with guards for no files, already converting, no pending)
+- Implemented Escape: clear all files with confirmation dialog state management
+- Added hook to main page.tsx and integrated with keyboard-triggered confirmation dialog
+- Dialog uses shadcn Dialog component with Cancel and Clear All buttons
+- Added helper function `getKeyboardShortcutHints()` for displaying shortcuts in UI
+- Verified typecheck passes with `npm run build`
+- Verified all shortcuts work in browser: Escape shows dialog, Ctrl+Enter starts conversion
+
+**Learnings:**
+- Use navigator.clipboard.read() for accessing clipboard files (requires permission)
+- Clipboard API returns ClipboardItem objects with types array for file detection
+- Use dragCounter-like pattern to track confirmation dialog state (Escape toggles)
+- Input/textarea elements should be excluded from keyboard shortcut handling
+
+---

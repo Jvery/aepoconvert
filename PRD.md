@@ -667,13 +667,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want to see credits and links in footer.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/layout/Footer.tsx`
-- [ ] GitHub link icon
-- [ ] "All conversions happen locally in your browser" text with shield icon
-- [ ] Copyright: "© 2024 aepoconvert"
-- [ ] Add to layout.tsx
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/layout/Footer.tsx`
+- [x] GitHub link icon
+- [x] "All conversions happen locally in your browser" text with shield icon
+- [x] Copyright: "© 2024 aepoconvert"
+- [x] Add to layout.tsx
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
