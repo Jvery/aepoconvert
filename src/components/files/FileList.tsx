@@ -64,6 +64,7 @@ export function FileList() {
                 file={file}
                 onRemove={() => removeFile(file.id)}
                 onFormatChange={(format) => setOutputFormat(file.id, format)}
+                availableFormats={availableFormats}
               />
             </motion.div>
           );

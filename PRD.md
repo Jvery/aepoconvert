@@ -555,12 +555,12 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need FormatSelector to update file's target format.
 
 **Acceptance Criteria:**
-- [ ] FormatSelector receives file.to as selected value
-- [ ] FormatSelector calls setOutputFormat(id, format) on change
-- [ ] FileCard displays selected output format
-- [ ] Default output format set on file add (first compatible format)
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] FormatSelector receives file.to as selected value
+- [x] FormatSelector calls setOutputFormat(id, format) on change
+- [x] FileCard displays selected output format
+- [x] Default output format set on file add (first compatible format)
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

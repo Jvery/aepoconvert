@@ -4,8 +4,9 @@ import { X, FileImage, FileAudio, FileText, File } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import type { ConvertibleFile } from '@/types';
+import type { ConvertibleFile, FormatInfo } from '@/types';
 import { detectFormat } from '@/lib/formats';
+import { FormatSelector } from './FormatSelector';
 
 export interface FileCardProps {
   /** The file data to display */
@@ -14,6 +15,8 @@ export interface FileCardProps {
   onRemove: () => void;
   /** Callback when output format is changed */
   onFormatChange: (format: string) => void;
+  /** Available output formats */
+  availableFormats: FormatInfo[];
 }
 
 /**
@@ -82,7 +85,7 @@ function truncateFileName(name: string, maxLength: number = 30): string {
  * FileCard component displays a single uploaded file with its details
  * Shows file type icon, name, size, detected format badge, and remove button
  */
-export function FileCard({ file, onRemove, onFormatChange }: FileCardProps) {
+export function FileCard({ file, onRemove, onFormatChange, availableFormats }: FileCardProps) {
   // Detect format info for category-based icon
   const formatInfo = detectFormat(file.file);
   const category = formatInfo?.category || 'document';
@@ -92,6 +95,8 @@ export function FileCard({ file, onRemove, onFormatChange }: FileCardProps) {
   const badgeVariant = category === 'image' ? 'default'
     : category === 'audio' ? 'secondary'
     : 'outline';
+
+  const currentOutput = file.to ?? availableFormats[0]?.extensions[0] ?? null;
 
   return (
     <Card className="relative p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -134,6 +139,22 @@ export function FileCard({ file, onRemove, onFormatChange }: FileCardProps) {
             </Badge>
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
+        <div className="space-y-0.5">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+            Convert to
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {availableFormats.length ? 'Choose your output format' : 'No compatible outputs'}
+          </p>
+        </div>
+        <FormatSelector
+          currentFormat={currentOutput}
+          availableFormats={availableFormats}
+          onSelect={onFormatChange}
+        />
       </div>
     </Card>
   );

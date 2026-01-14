@@ -773,3 +773,16 @@
 - Having DropZone call the store directly avoids missed callbacks and guarantees uploads surface in the UI as soon as they’re added
 
 ---
+
+### Iteration 40 - US-040: Wire up format selection to store
+**Status:** ✅ SUCCESS
+**What was done:**
+- Conversion store now assigns a default output format when adding files by choosing the first compatible extension (preferring one different from the source)
+- FileList passes each file’s convertible formats into FileCard, which now surfaces a FormatSelector tied to the stored `file.to` value
+- FormatSelector handles missing outputs gracefully and TypeScript checks pass with `npm run build`
+
+**Learnings:**
+- Preferring a convertible format that differs from the source avoids no-op defaults while still falling back when only one option exists
+- Keeping the selector inside each FileCard makes the selected output format visible alongside other file metadata
+
+---

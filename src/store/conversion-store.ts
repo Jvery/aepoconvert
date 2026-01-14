@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { detectFormat } from '@/lib/formats';
-import type { ConvertibleFile, QualitySettings } from '@/types';
+import { detectFormat, getConvertibleFormats } from '@/lib/formats';
+import type { ConvertibleFile, FormatInfo, QualitySettings } from '@/types';
 
 /**
  * Generates a unique ID for files
@@ -61,6 +61,26 @@ function getFileExtension(filename: string): string {
 }
 
 /**
+ * Select a default output format for a detected format
+ * Prefers the first convertible option that differs from the source extension
+ */
+function getDefaultOutputFormat(
+  sourceExtension: string,
+  detectedFormat: FormatInfo | null
+): string | null {
+  if (!detectedFormat) return null;
+
+  const convertibleFormats = getConvertibleFormats(detectedFormat);
+  if (convertibleFormats.length === 0) return null;
+
+  const preferredFormat =
+    convertibleFormats.find((format) => !format.extensions.includes(sourceExtension)) ??
+    convertibleFormats[0];
+
+  return preferredFormat.extensions[0] ?? null;
+}
+
+/**
  * Conversion store using Zustand with immer middleware for immutable updates
  */
 export const useConversionStore = create<ConversionState & ConversionActions>()(
@@ -82,13 +102,15 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
               : detectedFormat.extensions[0])
             : extension;
 
+          const defaultOutput = getDefaultOutputFormat(normalizedFrom, detectedFormat);
+
           return {
             id: generateId(),
             file,
             name: file.name,
             size: file.size,
             from: normalizedFrom,
-            to: null,
+            to: defaultOutput,
             status: 'pending',
             progress: 0,
             error: null,
