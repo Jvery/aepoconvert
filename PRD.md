@@ -838,7 +838,7 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 
 **Acceptance Criteria:**
 - [x] All buttons have aria-label when icon-only
-- [ ] Focus states visible on all interactive elements
+- [x] Focus states visible on all interactive elements
 - [ ] Color contrast meets WCAG AA (4.5:1 for text)
 - [ ] Screen reader announces status changes (aria-live regions)
 - [ ] Keyboard navigation works: Tab through all controls

@@ -365,10 +365,24 @@ show_header() {
     fi
     box_line ""
 
-    # Claude output section header
-    box_separator "${CYAN}Claude Code Output${NC}"
-    box_line ""
     box_bottom
+
+    # Claude output section (outside box for streaming compatibility)
+    echo ""
+    printf "${CYAN}${BOLD}▼ Claude Code Output ▼${NC}\n"
+    printf "${GRAY}"
+    draw_line "$(get_width)"
+    printf "${NC}\n"
+    echo ""
+}
+
+# Close Claude output section
+close_claude_section() {
+    echo ""
+    printf "${GRAY}"
+    draw_line "$(get_width)"
+    printf "${NC}\n"
+    printf "${CYAN}${BOLD}▲ End of Output ▲${NC}\n"
     echo ""
 }
 
@@ -497,6 +511,9 @@ while true; do
     else
         claude_exit_code=$?
     fi
+
+    # Close Claude output section
+    close_claude_section
 
     # Count after Claude runs
     remaining_after=$(count_remaining)
