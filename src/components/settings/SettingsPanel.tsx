@@ -66,6 +66,7 @@ export function SettingsPanel() {
           isOpen ? "max-h-[1200px] opacity-100" : "max-h-0 opacity-0"
         )}
         aria-hidden={!isOpen}
+        {...(!isOpen && { inert: true })}
       >
         <div className="border-t p-4">
           <Tabs

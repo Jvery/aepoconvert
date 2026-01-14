@@ -1204,3 +1204,25 @@
 - Dark mode muted-foreground at 0.705 lightness on 0.141 background has excellent contrast (no change needed)
 
 ---
+
+### Iteration 63 - US-060 (Criterion 4): Screen reader announces status changes (aria-live regions)
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `src/components/status/StatusAnnouncer.tsx` with centralized aria-live announcements
+- Added assertive aria-live region for critical updates (conversion start/complete/error)
+- Added polite aria-live region for less urgent updates (file add/remove)
+- Updated `ConversionProgress.tsx` with role="status" and aria-live on each status state
+- Added role="progressbar" with aria-valuenow/min/max to progress bar for screen reader progress tracking
+- Updated `ConverterStatus.tsx` with aria-live announcements when converters become ready or fail
+- Added StatusAnnouncer to layout.tsx alongside other global components
+- Verified 4 aria-live regions render in the DOM (2 from StatusAnnouncer, 1 from ConverterStatus, 1 from sonner)
+- Verified typecheck passes with `npm run build`
+- Verified changes work in browser with Playwright
+
+**Learnings:**
+- Use assertive aria-live for critical changes users need to know immediately (errors, completion)
+- Use polite aria-live for non-urgent updates (file additions) to avoid interrupting user flow
+- Clear announcements after ~1 second to prevent stale messages from being re-announced
+- role="progressbar" with aria-valuenow provides screen reader users with progress information
+
+---

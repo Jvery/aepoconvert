@@ -841,7 +841,7 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 - [x] Focus states visible on all interactive elements
 - [x] Color contrast meets WCAG AA (4.5:1 for text)
 - [x] Screen reader announces status changes (aria-live regions)
-- [ ] Keyboard navigation works: Tab through all controls
+- [x] Keyboard navigation works: Tab through all controls
 - [ ] Skip link to main content
 - [ ] Typecheck passes
 - [ ] Verify changes work in browser
