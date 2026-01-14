@@ -681,13 +681,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want assurance that my files stay private.
 
 **Acceptance Criteria:**
-- [ ] Create `src/components/status/PrivacyBadge.tsx`
-- [ ] Shield icon with "100% Private" text
-- [ ] Tooltip on hover explaining local processing
-- [ ] Use shadcn Tooltip component
-- [ ] Place near DropZone
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Create `src/components/status/PrivacyBadge.tsx`
+- [x] Shield icon with "100% Private" text
+- [x] Tooltip on hover explaining local processing
+- [x] Use shadcn Tooltip component
+- [x] Place near DropZone
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 

@@ -6,6 +6,7 @@ import { DownloadButton } from "@/components/actions/DownloadButton";
 import { FileList } from "@/components/files/FileList";
 import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { DropZone } from "@/components/upload/DropZone";
+import { PrivacyBadge } from "@/components/status/PrivacyBadge";
 import { useConversionStore } from "@/store/conversion-store";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import {
@@ -30,6 +31,9 @@ export default function Home() {
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Drop Zone */}
           <section className="rounded-2xl border border-foreground/5 bg-card/70 p-3 shadow-[0_20px_60px_-45px_rgba(59,130,246,0.35)] backdrop-blur">
+            <div className="mb-3 flex justify-center">
+              <PrivacyBadge />
+            </div>
             <DropZone className="bg-transparent" />
           </section>
 
