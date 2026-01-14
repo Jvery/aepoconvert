@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { toast } from 'sonner';
 import { detectFormat, getConvertibleFormats } from '@/lib/formats';
 import { convertWithWorkerFallback } from '@/lib/converters/worker-client';
 import type { ConvertibleFile, FormatInfo, QualitySettings } from '@/types';
@@ -189,6 +190,12 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
         });
       });
 
+      // Show toast for conversion started
+      const count = pendingFiles.length;
+      toast.loading(`Converting ${count} file${count === 1 ? '' : 's'}...`, {
+        id: 'conversion-progress',
+      });
+
       const runSingleConversion = async (file: ConvertibleFile) => {
         try {
           const result = await convertWithWorkerFallback({
@@ -245,6 +252,32 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
       set((draft) => {
         draft.isConverting = false;
       });
+
+      // Show completion toast based on results
+      const currentState = get();
+      const processedFiles = currentState.files.filter((f) =>
+        pendingFiles.some((pf) => pf.id === f.id)
+      );
+      const completedCount = processedFiles.filter((f) => f.status === 'complete').length;
+      const errorCount = processedFiles.filter((f) => f.status === 'error').length;
+
+      if (errorCount === 0 && completedCount > 0) {
+        toast.success('Conversion complete!', {
+          id: 'conversion-progress',
+          description: `Successfully converted ${completedCount} file${completedCount === 1 ? '' : 's'}`,
+        });
+      } else if (completedCount > 0 && errorCount > 0) {
+        toast.warning('Conversion finished with errors', {
+          id: 'conversion-progress',
+          description: `${completedCount} succeeded, ${errorCount} failed`,
+        });
+      } else if (errorCount > 0) {
+        const firstError = processedFiles.find((f) => f.status === 'error')?.error;
+        toast.error('Conversion failed', {
+          id: 'conversion-progress',
+          description: firstError || `${errorCount} file${errorCount === 1 ? '' : 's'} failed to convert`,
+        });
+      }
     },
 
     clearAll: () => {

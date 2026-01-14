@@ -84,6 +84,13 @@ export function DropZone({ disabled = false, className = '' }: DropZoneProps) {
       // Only add supported files to the store
       if (supportedFiles.length > 0) {
         addFiles(supportedFiles);
+        // Show success toast for added files
+        const count = supportedFiles.length;
+        toast.success(`Added ${count} file${count === 1 ? '' : 's'}`, {
+          description: count === 1
+            ? supportedFiles[0].name
+            : `${supportedFiles[0].name} and ${count - 1} more`,
+        });
       }
     },
     [addFiles, disabled]

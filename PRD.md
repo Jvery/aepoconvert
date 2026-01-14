@@ -596,13 +596,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want feedback on actions via toast messages.
 
 **Acceptance Criteria:**
-- [ ] Toast on file added: "Added X file(s)"
-- [ ] Toast on conversion started: "Converting..."
-- [ ] Toast on conversion complete: "Conversion complete!"
-- [ ] Toast on error: "Error: [message]"
-- [ ] Use sonner toast() function
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Toast on file added: "Added X file(s)"
+- [x] Toast on conversion started: "Converting..."
+- [x] Toast on conversion complete: "Conversion complete!"
+- [x] Toast on error: "Error: [message]"
+- [x] Use sonner toast() function
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
