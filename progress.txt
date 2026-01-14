@@ -786,3 +786,18 @@
 - Keeping the selector inside each FileCard makes the selected output format visible alongside other file metadata
 
 ---
+
+### Iteration 41 - US-041: Wire up conversion to workers
+**Status:** ✅ SUCCESS
+**What was done:**
+- startConversion now guards against concurrent runs, marks pending files as converting, and snapshots quality settings for consistent runs
+- Each pending file is sent through convertWithWorkerFallback, updating per-file progress from worker messages
+- Successful conversions store the resulting blob and mark status complete; failures record an error state without breaking other conversions
+- isConverting resets once all conversions settle to re-enable the Convert button
+
+**Learnings:**
+- Taking a settings snapshot per run prevents mid-conversion UI tweaks from desynchronizing worker parameters
+- Promise.allSettled ensures the converting flag clears even when some files fail
+- Progress callbacks should ignore removed/non-converting files to avoid stale state writes
+
+---

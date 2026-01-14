@@ -568,13 +568,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need ConvertButton to trigger worker-based conversion.
 
 **Acceptance Criteria:**
-- [ ] startConversion() action iterates over files with status 'pending'
-- [ ] For each file, spawn worker via runConversion()
-- [ ] Update file.progress via updateFile() on worker progress messages
-- [ ] Update file.status to 'complete' and file.result to blob on worker complete
-- [ ] Update file.status to 'error' and file.error on worker error
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] startConversion() action iterates over files with status 'pending'
+- [x] For each file, spawn worker via runConversion()
+- [x] Update file.progress via updateFile() on worker progress messages
+- [x] Update file.status to 'complete' and file.result to blob on worker complete
+- [x] Update file.status to 'error' and file.error on worker error
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
