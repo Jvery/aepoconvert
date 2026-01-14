@@ -746,3 +746,17 @@
 - Light dashed outlines plus subtle glow give destructive actions emphasis while keeping them secondary to primary CTAs
 
 ---
+
+### Iteration 38 - US-038: Assemble main page layout
+**Status:** ✅ SUCCESS
+**What was done:**
+- Rebuilt `src/app/[locale]/page.tsx` into layered sections with gradient glows and glassy panels for clearer hierarchy
+- Ordered the page as DropZone → FileList → SettingsPanel → action row inside a centered max-w-4xl container with mobile/desktop spacing (gap-4, sm:gap-6)
+- Added action row with ConvertButton, DownloadButton (wired to store files), and ClearAllButton in a responsive flex layout
+- Verified typecheck via `npm run build`
+
+**Learnings:**
+- Using light gradient orbs plus subtle borders/backdrop blur keeps focus on core components without redesigning them
+- Combining gap utilities (gap-4 with sm:gap-6) cleanly satisfies mobile vs desktop spacing requirements in one stack
+
+---

@@ -528,13 +528,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a user, I want all components arranged on a single page.
 
 **Acceptance Criteria:**
-- [ ] Update `src/app/page.tsx`
-- [ ] Layout order: DropZone → FileList → SettingsPanel → Action buttons row
-- [ ] Centered container with max-w-4xl
-- [ ] Responsive spacing (gap-6 on desktop, gap-4 on mobile)
-- [ ] Action buttons: ConvertButton + DownloadButton + ClearAllButton in flex row
-- [ ] Typecheck passes
-- [ ] Verify changes work in browser
+- [x] Update `src/app/page.tsx`
+- [x] Layout order: DropZone → FileList → SettingsPanel → Action buttons row
+- [x] Centered container with max-w-4xl
+- [x] Responsive spacing (gap-6 on desktop, gap-4 on mobile)
+- [x] Action buttons: ConvertButton + DownloadButton + ClearAllButton in flex row
+- [x] Typecheck passes
+- [x] Verify changes work in browser
 
 ---
 
