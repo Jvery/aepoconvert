@@ -1226,3 +1226,25 @@
 - role="progressbar" with aria-valuenow provides screen reader users with progress information
 
 ---
+
+### Iteration 64 - US-060 (Criterion 5): Keyboard navigation works: Tab through all controls
+**Status:** ✅ SUCCESS
+**What was done:**
+- Verified all interactive elements are already keyboard-accessible (buttons, links, form controls)
+- Fixed collapsed SettingsPanel content being focusable even when hidden
+- Added `inert` attribute to collapsed content to exclude hidden controls from tab order
+- Tab order now properly follows visual layout:
+  1. Theme toggle button (header)
+  2. Privacy badge (main)
+  3. Drop zone (main)
+  4. Settings toggle button (main)
+  5. When expanded: Simple/Advanced tabs → Quality buttons
+  6. GitHub link (footer)
+- Verified typecheck passes with `npm run build`
+- Verified keyboard navigation works correctly in browser with Playwright
+
+**Learnings:**
+- `aria-hidden` only hides content from screen readers but doesn't prevent keyboard focus
+- Use `inert` attribute to remove elements from both accessibility tree and tab order
+- Spread syntax `{...(!isOpen && { inert: true })}` cleanly applies conditional boolean attributes
+- React doesn't emit warning for `inert={true}` unlike `inert=""`

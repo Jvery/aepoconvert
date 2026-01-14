@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { GradientBackground } from '@/components/layout/GradientBackground';
 import { DragOverlay } from '@/components/layout/DragOverlay';
+import { SkipLink } from '@/components/layout/SkipLink';
 import { ConverterStatus } from '@/components/status/ConverterStatus';
 import { StatusAnnouncer } from '@/components/status/StatusAnnouncer';
 import { Toaster } from '@/components/ui/sonner';
@@ -78,9 +79,10 @@ export default async function LocaleLayout({ children, params }: Props) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
+          <SkipLink />
           <GradientBackground />
           <Header />
-          <main className="min-h-[calc(100vh-7rem)]">
+          <main id="main-content" tabIndex={-1} className="min-h-[calc(100vh-7rem)] focus:outline-none">
             {children}
           </main>
           <Footer />
