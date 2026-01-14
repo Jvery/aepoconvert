@@ -1053,3 +1053,24 @@
 - Show the largest file's estimate when multiple files need time estimates
 
 ---
+
+### Iteration 54 - US-054: Create Dockerfile for deployment
+**Status:** ✅ SUCCESS
+**What was done:**
+- Created `Dockerfile` with multi-stage build (deps → builder → runner)
+- Stage 1 (deps): Uses node:20-alpine, installs dependencies with npm ci
+- Stage 2 (builder): Copies deps, builds Next.js app with NODE_ENV=production
+- Stage 3 (runner): Production image with node:20-alpine, non-root user (nextjs)
+- Set NODE_ENV=production and NEXT_TELEMETRY_DISABLED=1
+- Expose port 3000 with HOSTNAME="0.0.0.0"
+- CMD ["node", "server.js"] for standalone output
+- Updated next.config.ts with output: 'standalone'
+- Verified typecheck passes with `npm run build`
+
+**Learnings:**
+- Next.js standalone output creates a minimal server.js that can run without node_modules
+- Use libc6-compat on Alpine for better compatibility with native modules
+- Create non-root user (nextjs:nodejs) for security best practices
+- Copy .next/standalone and .next/static separately for proper build output
+
+---

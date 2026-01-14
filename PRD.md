@@ -767,13 +767,13 @@ aepoconvert is a free, open-source online file converter with a focus on simplic
 **Description:** As a developer, I need docker-compose for local development.
 
 **Acceptance Criteria:**
-- [ ] Create `docker-compose.yml`
-- [ ] Service 'app' building from Dockerfile
-- [ ] Port mapping 3000:3000
-- [ ] Volume for development: .:/app (optional dev override)
-- [ ] Environment variables support
-- [ ] App starts with `docker-compose up --build`
-- [ ] Typecheck passes
+- [x] Create `docker-compose.yml`
+- [x] Service 'app' building from Dockerfile
+- [x] Port mapping 3000:3000
+- [x] Volume for development: .:/app (optional dev override)
+- [x] Environment variables support
+- [x] App starts with `docker-compose up --build`
+- [x] Typecheck passes
 
 ---
 
