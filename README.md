@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# aepoconvert
+
+A free, open-source online file converter with a focus on **privacy** and **simplicity**. All file conversions happen entirely in your browser using WebAssembly — no files are uploaded to external servers.
+
+## Features
+
+- **100% Private** — Files never leave your browser. All processing happens locally using WebAssembly
+- **100+ Image Formats** — Convert between PNG, JPG, WebP, GIF, BMP, TIFF, ICO, RAW formats, and many more
+- **15+ Audio Formats** — MP3, WAV, OGG, FLAC, AAC, M4A, and more
+- **15+ Document Formats** — Markdown, HTML, PDF, DOCX, TXT, RST, and more
+- **Batch Conversion** — Convert multiple files at once with ZIP download
+- **Modern UI** — Clean, animated interface with dark/light mode
+- **Quality Settings** — Simple presets or advanced controls for fine-tuned output
+- **No Registration** — Just drag, drop, and convert
+
+## Tech Stack
+
+- **Framework:** Next.js 16 with App Router & TypeScript
+- **UI:** React 19, TailwindCSS 4, shadcn/ui, Framer Motion
+- **Conversion Engines:**
+  - [ImageMagick WASM](https://github.com/nicolo-ribaudo/magick-wasm) — Image processing
+  - [FFmpeg WASM](https://github.com/ffmpegwasm/ffmpeg.wasm) — Audio conversion
+  - [Pandoc WASM](https://github.com/nicolo-ribaudo/pandoc-wasm) — Document conversion
+- **State Management:** Zustand with Immer
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20.x or higher
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/Jvery/aepoconvert.git
+cd aepoconvert
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Docker
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Using Docker Compose
+docker-compose up
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Or build manually
+docker build -t aepoconvert .
+docker run -p 3000:3000 aepoconvert
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Supported Formats
 
-## Deploy on Vercel
+### Images
+PNG, JPG/JPEG, WebP, GIF, BMP, TIFF, ICO, SVG, HEIC, AVIF, RAW (CR2, NEF, ARW, DNG), PSD, and 80+ more formats via ImageMagick
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Audio
+MP3, WAV, OGG, FLAC, AAC, M4A, WMA, AIFF, and more via FFmpeg
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Documents
+Markdown, HTML, PDF, DOCX, TXT, RST, LaTeX, EPUB, ODT, and more via Pandoc
+
+## How It Works
+
+1. **Drag & Drop** your files onto the page
+2. **Select** the output format for each file
+3. **Adjust** quality settings if needed
+4. **Click Convert** — processing happens in your browser
+5. **Download** individual files or all as ZIP
+
+## Privacy
+
+Your files are processed entirely in your browser using WebAssembly libraries. Nothing is uploaded to any server. This means:
+
+- Your files stay on your device
+- Conversion works offline (after initial page load)
+- No file size limits imposed by servers
+- No data collection or tracking
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT License — feel free to use this project for personal or commercial purposes.
+
+## Acknowledgments
+
+- [ImageMagick](https://imagemagick.org/) for powerful image processing
+- [FFmpeg](https://ffmpeg.org/) for audio/video conversion
+- [Pandoc](https://pandoc.org/) for document conversion
+- [shadcn/ui](https://ui.shadcn.com/) for beautiful UI components
