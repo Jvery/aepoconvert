@@ -121,7 +121,7 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
             result: null,
           };
         });
-        state.files.push(...newFiles);
+        state.files.unshift(...newFiles);
       });
     },
 
