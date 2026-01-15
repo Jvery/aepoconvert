@@ -12,13 +12,15 @@ import type { FormatCategory } from "@/types";
 
 interface SettingsPanelProps {
   activeCategories: Set<FormatCategory>;
+  /** When true, renders without the outer card wrapper (for use in dialogs) */
+  isEmbedded?: boolean;
 }
 
 /**
  * Collapsible settings panel that lets users switch between simple and advanced quality controls
  * Only shows settings relevant to the file types currently added
  */
-export function SettingsPanel({ activeCategories }: SettingsPanelProps) {
+export function SettingsPanel({ activeCategories, isEmbedded = false }: SettingsPanelProps) {
   const { globalSettings, setGlobalSettings } = useConversionStore();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"simple" | "advanced">(
@@ -33,6 +35,28 @@ export function SettingsPanel({ activeCategories }: SettingsPanelProps) {
       setGlobalSettings({ mode: value });
     }
   };
+
+  // Embedded mode: render just the tabs content without wrapper
+  if (isEmbedded) {
+    return (
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="space-y-4"
+      >
+        <TabsList className="w-full">
+          <TabsTrigger value="simple">Simple</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+        </TabsList>
+        <TabsContent value="simple">
+          <SimpleQualitySettings activeCategories={activeCategories} />
+        </TabsContent>
+        <TabsContent value="advanced">
+          <AdvancedQualitySettings activeCategories={activeCategories} />
+        </TabsContent>
+      </Tabs>
+    );
+  }
 
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
