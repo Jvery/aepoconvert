@@ -221,6 +221,7 @@ export async function convertWithWorkerFallback(
       progress: 0,
       error: null,
       result: null,
+      previewUrl: null,
     };
 
     const blob = await convert(convertibleFile, onProgress, settings);

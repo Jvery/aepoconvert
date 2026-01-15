@@ -12,6 +12,7 @@ import { SkipLink } from '@/components/layout/SkipLink';
 import { ConverterStatus } from '@/components/status/ConverterStatus';
 import { StatusAnnouncer } from '@/components/status/StatusAnnouncer';
 import { Toaster } from '@/components/ui/sonner';
+import { Providers } from '@/components/providers';
 import "../globals.css";
 
 const geistSans = Geist({
@@ -79,17 +80,19 @@ export default async function LocaleLayout({ children, params }: Props) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
-          <SkipLink />
-          <GradientBackground />
-          <Header />
-          <main id="main-content" tabIndex={-1} className="min-h-[calc(100vh-7rem)] focus:outline-none">
-            {children}
-          </main>
-          <Footer />
-          <DragOverlay />
-          <ConverterStatus />
-          <StatusAnnouncer />
-          <Toaster />
+          <Providers>
+            <SkipLink />
+            <GradientBackground />
+            <Header />
+            <main id="main-content" tabIndex={-1} className="min-h-[calc(100vh-7rem)] focus:outline-none">
+              {children}
+            </main>
+            <Footer />
+            <DragOverlay />
+            <ConverterStatus />
+            <StatusAnnouncer />
+            <Toaster />
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -115,7 +115,7 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats, onR
       {hasPreview && (
         <div className="absolute inset-0 z-0">
           <img
-            src={file.previewUrl}
+            src={file.previewUrl ?? undefined}
             alt=""
             aria-hidden="true"
             className="h-full w-full object-cover"
