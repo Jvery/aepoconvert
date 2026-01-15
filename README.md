@@ -97,7 +97,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License — feel free to use this project for personal or commercial purposes.
+[AGPL-3.0](LICENSE) — This project is open source under the GNU Affero General Public License v3.0.
 
 ## Acknowledgments
 
