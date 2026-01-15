@@ -31,6 +31,8 @@ export interface ConvertibleFile {
   error: string | null;
   /** Converted file blob if conversion succeeded */
   result: Blob | null;
+  /** Preview URL for image files (Object URL) */
+  previewUrl: string | null;
 }
 
 /**

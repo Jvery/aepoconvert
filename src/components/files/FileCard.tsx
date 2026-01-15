@@ -103,23 +103,40 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats, onR
   const currentOutput = file.to ?? availableFormats[0]?.extensions[0] ?? null;
   const isError = file.status === 'error';
 
+  const hasPreview = !!file.previewUrl;
+
   return (
     <Card className={cn(
-      "relative p-4 shadow-sm hover:shadow-md transition-all duration-200",
+      "relative p-4 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden",
+      hasPreview && "bg-transparent",
       isError && "border-destructive border-2 bg-destructive/5"
     )}>
+      {/* Background preview layer for images */}
+      {hasPreview && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={file.previewUrl}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover"
+          />
+          {/* Overlay for readability */}
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
+        </div>
+      )}
+
       {/* Remove button in top-right corner */}
       <Button
         variant="ghost"
         size="icon"
         onClick={onRemove}
-        className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-60 hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+        className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-60 hover:opacity-100 hover:bg-destructive/10 hover:text-destructive z-10"
         aria-label={`Remove ${file.name}`}
       >
         <X className="h-4 w-4" />
       </Button>
 
-      <div className="flex items-start gap-3 pr-8">
+      <div className="relative z-10 flex items-start gap-3 pr-8">
         {/* File type icon */}
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
           <FileIcon className="h-5 w-5 text-muted-foreground" />
@@ -161,7 +178,7 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats, onR
 
       {/* Error state with retry button */}
       {isError && onRetry ? (
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2">
+        <div className="relative z-10 mt-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2">
           <div className="space-y-0.5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-destructive">
               Conversion failed
@@ -182,7 +199,7 @@ export function FileCard({ file, onRemove, onFormatChange, availableFormats, onR
           </Button>
         </div>
       ) : (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
+        <div className="relative z-10 mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
           <div className="space-y-0.5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
               Convert to

@@ -108,6 +108,10 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
 
           const defaultOutput = getDefaultOutputFormat(normalizedFrom, detectedFormat);
 
+          // Generate preview URL for image files
+          const isImage = detectedFormat?.category === 'image';
+          const previewUrl = isImage ? URL.createObjectURL(file) : null;
+
           return {
             id: generateId(),
             file,
@@ -119,6 +123,7 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
             progress: 0,
             error: null,
             result: null,
+            previewUrl,
           };
         });
         state.files.unshift(...newFiles);
@@ -129,6 +134,11 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
       set((state) => {
         const index = state.files.findIndex((f) => f.id === id);
         if (index !== -1) {
+          // Cleanup Object URL to prevent memory leaks
+          const file = state.files[index];
+          if (file.previewUrl) {
+            URL.revokeObjectURL(file.previewUrl);
+          }
           state.files.splice(index, 1);
         }
       });
@@ -296,6 +306,12 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
 
     clearAll: () => {
       set((state) => {
+        // Cleanup all Object URLs to prevent memory leaks
+        state.files.forEach((file) => {
+          if (file.previewUrl) {
+            URL.revokeObjectURL(file.previewUrl);
+          }
+        });
         state.files = [];
         state.isConverting = false;
       });
