@@ -21,7 +21,7 @@ export function Footer() {
         <div className="flex items-center gap-4">
           {/* GitHub Link */}
           <a
-            href="https://github.com/aepoconvert/aepoconvert"
+            href="https://github.com/Jvery/aepoconvert"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
