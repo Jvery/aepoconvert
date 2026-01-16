@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useMemo } from "react";
+import { ThemeProvider } from "next-themes";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { BackendProvider } from "@/lib/backend";
 import { PreferencesSync } from "./PreferencesSync";
@@ -25,21 +26,25 @@ export function Providers({ children }: ProvidersProps) {
   // If Convex is not configured, use local-only backend
   if (!convex) {
     return (
-      <BackendProvider adapter="local">
-        <PreferencesSync />
-        {children}
-      </BackendProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <BackendProvider adapter="local">
+          <PreferencesSync />
+          {children}
+        </BackendProvider>
+      </ThemeProvider>
     );
   }
 
   // Convex is configured, use it as the backend
   return (
-    <ConvexProvider client={convex}>
-      <BackendProviderWithConvex convex={convex}>
-        <PreferencesSync />
-        {children}
-      </BackendProviderWithConvex>
-    </ConvexProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ConvexProvider client={convex}>
+        <BackendProviderWithConvex convex={convex}>
+          <PreferencesSync />
+          {children}
+        </BackendProviderWithConvex>
+      </ConvexProvider>
+    </ThemeProvider>
   );
 }
 
