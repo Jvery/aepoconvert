@@ -6,6 +6,7 @@ import { Settings2, ChevronUp } from 'lucide-react';
 import { ConvertButton } from '@/components/actions/ConvertButton';
 import { ClearAllButton } from '@/components/actions/ClearAllButton';
 import { DownloadButton } from '@/components/actions/DownloadButton';
+import { BatchFormatSelector } from '@/components/actions/BatchFormatSelector';
 import { SettingsPanel } from '@/components/settings/SettingsPanel';
 import { Button } from '@/components/ui/button';
 import {
@@ -102,6 +103,7 @@ export function StickyActionBar() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Main Actions */}
             <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <BatchFormatSelector className="w-full sm:w-auto" />
               <ConvertButton className="w-full sm:w-auto" />
               <DownloadButton files={files} className="w-full sm:w-auto" />
               <ClearAllButton className="w-full sm:w-auto" />

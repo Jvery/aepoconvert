@@ -34,8 +34,10 @@ interface ConversionActions {
   removeFile: (id: string) => void;
   /** Update a file's properties */
   updateFile: (id: string, updates: Partial<ConvertibleFile>) => void;
- /** Set the output format for a specific file */
+  /** Set the output format for a specific file */
   setOutputFormat: (id: string, format: string) => void;
+  /** Set output format for all pending files */
+  setAllOutputFormats: (format: string) => void;
   /** Update global quality settings */
   setGlobalSettings: (settings: Partial<QualitySettings>) => void;
   /** Start the conversion process */
@@ -159,6 +161,16 @@ export const useConversionStore = create<ConversionState & ConversionActions>()(
         if (file) {
           file.to = format;
         }
+      });
+    },
+
+    setAllOutputFormats: (format: string) => {
+      set((state) => {
+        state.files.forEach((file) => {
+          if (file.status === 'pending') {
+            file.to = format;
+          }
+        });
       });
     },
 
