@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Settings2, ChevronUp } from 'lucide-react';
 import { ConvertButton } from '@/components/actions/ConvertButton';
@@ -20,9 +20,8 @@ import { cn } from '@/lib/utils';
 import type { FormatCategory } from '@/types';
 
 /**
- * Sticky action bar fixed at the bottom of the viewport.
+ * Action bar positioned at the bottom of the page content.
  * Contains convert, download, clear buttons and a settings toggle.
- * Uses sticky positioning to stay visible while not covering the footer.
  */
 export function StickyActionBar() {
   const files = useConversionStore((state) => state.files);
@@ -30,6 +29,32 @@ export function StickyActionBar() {
   const [bottomOffset, setBottomOffset] = useState(0);
 
   const hasFiles = files.length > 0;
+
+  // Track footer position to avoid overlapping
+  useEffect(() => {
+    const updatePosition = () => {
+      const footer = document.querySelector('footer');
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        // If footer is visible in viewport, push bar up
+        if (footerRect.top < viewportHeight) {
+          setBottomOffset(viewportHeight - footerRect.top);
+        } else {
+          setBottomOffset(0);
+        }
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('scroll', updatePosition);
+    window.addEventListener('resize', updatePosition);
+
+    return () => {
+      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, []);
 
   // Derive active file categories from added files
   const activeCategories = useMemo<Set<FormatCategory>>(() => {
@@ -43,35 +68,11 @@ export function StickyActionBar() {
     return categories;
   }, [files]);
 
-  // Adjust position when footer becomes visible
-  useEffect(() => {
-    const handleScroll = () => {
-      const footer = document.querySelector('footer');
-      if (!footer) return;
-
-      const footerRect = footer.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      // Calculate how much the footer is overlapping with the sticky bar area
-      const footerOverlap = Math.max(0, viewportHeight - footerRect.top);
-      setBottomOffset(footerOverlap);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, []);
-
   return (
     <>
-      {/* Sticky Bar */}
+      {/* Action Bar - Fixed at bottom */}
       <motion.div
-        initial={{ y: 100, opacity: 0 }}
+        initial={{ y: 20, opacity: 0 }}
         animate={{
           y: 0,
           opacity: 1,
@@ -82,19 +83,16 @@ export function StickyActionBar() {
           damping: 30,
           opacity: { duration: 0.2 }
         }}
-        className="fixed left-0 right-0 z-40 px-4 pb-4 pt-2 pointer-events-none"
-        style={{
-          bottom: bottomOffset,
-          transition: 'bottom 0.15s ease-out',
-        }}
+        className="pointer-events-none fixed left-0 right-0 z-40 px-4 pb-4 pt-2"
+        style={{ bottom: bottomOffset }}
       >
         <div
           className={cn(
             'pointer-events-auto mx-auto max-w-4xl',
             'rounded-2xl border border-white/10 dark:border-white/5',
             'bg-background/80 backdrop-blur-xl',
-            'shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.12),0_4px_24px_-4px_rgba(0,0,0,0.08)]',
-            'dark:shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.4),0_4px_24px_-4px_rgba(0,0,0,0.3)]',
+            'shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.12),0_-4px_24px_-4px_rgba(0,0,0,0.08)]',
+            'dark:shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.4),0_-4px_24px_-4px_rgba(0,0,0,0.3)]',
             'p-3 sm:p-4'
           )}
         >
