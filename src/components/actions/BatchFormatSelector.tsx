@@ -36,7 +36,7 @@ export function BatchFormatSelector({ className }: BatchFormatSelectorProps) {
   // Check if all pending files have the same source format
   const batchInfo = useMemo(() => {
     const pendingFiles = files.filter((f) => f.status === 'pending');
-    if (pendingFiles.length < 2) return null;
+    if (pendingFiles.length === 0) return null;
 
     const firstFormat = pendingFiles[0].from;
     const allSameFormat = pendingFiles.every((f) => f.from === firstFormat);
@@ -104,24 +104,28 @@ export function BatchFormatSelector({ className }: BatchFormatSelectorProps) {
             'hover:border-primary/30 hover:from-primary/10 hover:to-primary/5',
             'transition-all duration-300'
           )}
-          aria-label="Set output format for all files"
+          aria-label={fileCount === 1 ? "Set output format" : "Set output format for all files"}
         >
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Layers className="h-3.5 w-3.5" />
           </span>
-          <SelectValue placeholder="Convert all to...">
+          <SelectValue placeholder={fileCount === 1 ? "Convert to..." : "Convert all to..."}>
             {selectedFormat ? (
               <span className="flex items-center gap-1.5">
-                <span className="text-sm">All to</span>
+                {fileCount > 1 && <span className="text-sm">All to</span>}
                 <span className="font-semibold uppercase">
                   {selectedFormat.extensions[0]}
                 </span>
-                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
-                  {fileCount}
-                </span>
+                {fileCount > 1 && (
+                  <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                    {fileCount}
+                  </span>
+                )}
               </span>
             ) : (
-              <span className="text-sm text-muted-foreground">Convert all to...</span>
+              <span className="text-sm text-muted-foreground">
+                {fileCount === 1 ? "Convert to..." : "Convert all to..."}
+              </span>
             )}
           </SelectValue>
         </SelectTrigger>
