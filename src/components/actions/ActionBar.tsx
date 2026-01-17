@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Settings2, ChevronUp } from 'lucide-react';
+import { Settings2, ChevronDown } from 'lucide-react';
 import { ConvertButton } from '@/components/actions/ConvertButton';
 import { ClearAllButton } from '@/components/actions/ClearAllButton';
 import { DownloadButton } from '@/components/actions/DownloadButton';
@@ -21,41 +21,14 @@ import { cn } from '@/lib/utils';
 import type { FormatCategory } from '@/types';
 
 /**
- * Action bar positioned at the bottom of the page content.
+ * Action bar positioned at the top of the page content.
  * Contains convert, download, clear buttons and a settings toggle.
  */
-export function StickyActionBar() {
+export function ActionBar() {
   const files = useConversionStore((state) => state.files);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [bottomOffset, setBottomOffset] = useState(0);
 
   const hasFiles = files.length > 0;
-
-  // Track footer position to avoid overlapping
-  useEffect(() => {
-    const updatePosition = () => {
-      const footer = document.querySelector('footer');
-      if (footer) {
-        const footerRect = footer.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        // If footer is visible in viewport, push bar up
-        if (footerRect.top < viewportHeight) {
-          setBottomOffset(viewportHeight - footerRect.top);
-        } else {
-          setBottomOffset(0);
-        }
-      }
-    };
-
-    updatePosition();
-    window.addEventListener('scroll', updatePosition);
-    window.addEventListener('resize', updatePosition);
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition);
-      window.removeEventListener('resize', updatePosition);
-    };
-  }, []);
 
   // Derive active file categories from added files
   const activeCategories = useMemo<Set<FormatCategory>>(() => {
@@ -71,9 +44,9 @@ export function StickyActionBar() {
 
   return (
     <>
-      {/* Action Bar - Fixed at bottom */}
+      {/* Action Bar - Top of page */}
       <motion.div
-        initial={{ y: 20, opacity: 0 }}
+        initial={{ y: -20, opacity: 0 }}
         animate={{
           y: 0,
           opacity: 1,
@@ -84,21 +57,20 @@ export function StickyActionBar() {
           damping: 30,
           opacity: { duration: 0.2 }
         }}
-        className="pointer-events-none fixed left-0 right-0 z-40 px-4 pb-4 pt-2"
-        style={{ bottom: bottomOffset }}
+        className="w-full"
       >
         <div
           className={cn(
-            'pointer-events-auto mx-auto max-w-4xl',
+            'mx-auto max-w-4xl',
             'rounded-2xl border border-white/10 dark:border-white/5',
             'bg-background/80 backdrop-blur-xl',
-            'shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.12),0_-4px_24px_-4px_rgba(0,0,0,0.08)]',
-            'dark:shadow-[0_-8px_32px_-8px_rgba(0,0,0,0.4),0_-4px_24px_-4px_rgba(0,0,0,0.3)]',
+            'shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12),0_4px_24px_-4px_rgba(0,0,0,0.08)]',
+            'dark:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4),0_4px_24px_-4px_rgba(0,0,0,0.3)]',
             'p-3 sm:p-4'
           )}
         >
-          {/* Subtle top gradient line */}
-          <div className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          {/* Subtle bottom gradient line */}
+          <div className="absolute inset-x-0 bottom-0 h-px rounded-b-2xl bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Main Actions */}
@@ -142,7 +114,7 @@ export function StickyActionBar() {
                       <span className="text-sm font-semibold">Settings</span>
                       <span className="text-[10px] text-muted-foreground">Quality options</span>
                     </span>
-                    <ChevronUp className="relative ml-1 h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    <ChevronDown className="relative ml-1 h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:translate-y-0.5" />
                   </Button>
                 </motion.div>
               )}
