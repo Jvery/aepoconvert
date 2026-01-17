@@ -52,6 +52,7 @@ export function ClearAllButton({ className }: ClearAllButtonProps) {
           aria-label="Clear all files"
           className={cn(
             'group relative inline-flex h-12 min-w-[160px] items-center justify-center overflow-hidden border-dashed border-foreground/20 bg-transparent text-sm font-semibold text-foreground/80',
+            'sm:w-12 sm:min-w-0 lg:w-auto lg:min-w-[160px]',
             'hover:border-destructive/50 hover:bg-destructive/5 hover:text-destructive transition-all duration-200 ease-out',
             'focus-visible:border-destructive/60 focus-visible:ring-2 focus-visible:ring-destructive/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             className
@@ -60,10 +61,10 @@ export function ClearAllButton({ className }: ClearAllButtonProps) {
           <span className="absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <span className="absolute inset-0 bg-gradient-to-r from-destructive/10 via-amber-400/10 to-orange-500/10 blur-2xl" />
           </span>
-          <span className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-foreground/15 bg-gradient-to-br from-background to-muted/40 text-foreground/70 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.45)] transition-colors group-hover:border-destructive/50 group-hover:text-destructive">
+          <span className="relative flex h-9 w-9 items-center justify-center text-foreground/70 transition-colors group-hover:text-destructive sm:border-0 sm:bg-transparent sm:shadow-none lg:rounded-lg lg:border lg:border-foreground/15 lg:bg-gradient-to-br lg:from-background lg:to-muted/40 lg:shadow-[0_10px_30px_-18px_rgba(0,0,0,0.45)] lg:group-hover:border-destructive/50">
             <Trash2 className="h-4 w-4" aria-hidden="true" />
           </span>
-          <span className="ml-3 flex flex-col text-left leading-tight">
+          <span className="ml-3 flex flex-col text-left leading-tight sm:hidden lg:flex">
             <span className="text-sm font-semibold tracking-wide">Clear all</span>
             <span className="text-[11px] text-muted-foreground">Reset the queue</span>
           </span>

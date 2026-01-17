@@ -95,7 +95,9 @@ export function ActionBar() {
                     size="lg"
                     onClick={() => setSettingsOpen(true)}
                     className={cn(
-                      'group relative h-12 w-full gap-2 overflow-hidden rounded-xl border-foreground/10 px-4 sm:w-auto',
+                      'group relative h-12 overflow-hidden rounded-xl border-foreground/10',
+                      // Responsive width: square on small, auto on md+
+                      'w-full min-w-[150px] gap-2 px-4 sm:w-12 sm:min-w-0 sm:gap-0 sm:px-0 lg:w-auto lg:min-w-[150px] lg:gap-2 lg:px-4',
                       'bg-gradient-to-br from-muted/50 to-muted/30',
                       'hover:border-primary/30 hover:from-primary/10 hover:to-primary/5',
                       'transition-all duration-300'
@@ -107,14 +109,19 @@ export function ActionBar() {
                       <span className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5" />
                     </span>
 
-                    <span className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+                    {/* Icon - always visible */}
+                    <span className="relative flex h-8 w-8 items-center justify-center text-primary transition-transform duration-300 group-hover:scale-110 lg:rounded-lg lg:bg-primary/10">
                       <Settings2 className="h-4 w-4" />
                     </span>
-                    <span className="relative flex flex-col items-start text-left">
+
+                    {/* Text - hidden on small, visible on md+ */}
+                    <span className="relative flex flex-col items-start text-left sm:hidden lg:flex">
                       <span className="text-sm font-semibold">Settings</span>
                       <span className="text-[10px] text-muted-foreground">Quality options</span>
                     </span>
-                    <ChevronDown className="relative ml-1 h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:translate-y-0.5" />
+
+                    {/* Chevron - hidden on small, visible on md+ */}
+                    <ChevronDown className="relative ml-1 h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:translate-y-0.5 sm:hidden lg:block" />
                   </Button>
                 </motion.div>
               )}
